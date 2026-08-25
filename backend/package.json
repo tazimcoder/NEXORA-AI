@@ -1,0 +1,30 @@
+{
+  "name": "nexora-ai-backend",
+  "version": "0.1.0",
+  "description": "NEXORA AI Backend API & Execution Service Engine",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "bullmq": "^6.1.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "ioredis": "^5.4.1",
+    "ioredis-mock": "^8.13.1",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.11.0",
+    "socket.io": "^4.8.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "socket.io-client": "^4.8.3",
+    "supertest": "^7.0.0"
+  }
+}
