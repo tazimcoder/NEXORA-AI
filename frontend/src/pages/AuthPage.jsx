@@ -105,9 +105,28 @@ export default function AuthPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-center items-center p-4 relative overflow-hidden">
-      {/* Ambient background lighting */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-500/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
+      {/* Animated Futuristic Background Layer */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        {/* Floating Glowing Orbs */}
+        <div className="absolute -top-40 -left-40 w-[32rem] h-[32rem] bg-indigo-600/25 rounded-full blur-[140px] animate-blob-slow"></div>
+        <div className="absolute top-1/3 -right-40 w-[36rem] h-[36rem] bg-purple-600/20 rounded-full blur-[160px] animate-blob-reverse"></div>
+        <div className="absolute -bottom-40 left-1/3 w-[40rem] h-[40rem] bg-cyan-600/20 rounded-full blur-[160px] animate-pulse-glow"></div>
+        <div className="absolute top-2/3 left-10 w-96 h-96 bg-pink-600/15 rounded-full blur-[140px] animate-blob-slow"></div>
+
+        {/* Dynamic Animated Grid Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f293718_1px,transparent_1px),linear-gradient(to_bottom,#1f293718_1px,transparent_1px)] bg-[size:4rem_4rem] animate-grid-move"></div>
+
+        {/* Ambient Light Beams */}
+        <div className="absolute top-0 left-1/4 w-full h-96 bg-gradient-to-r from-transparent via-cyan-500/10 to-transparent animate-beam"></div>
+        <div className="absolute top-1/2 -left-1/4 w-full h-96 bg-gradient-to-r from-transparent via-purple-500/10 to-transparent animate-beam" style={{ animationDelay: '5s' }}></div>
+
+        {/* Animated Floating Glow Particles */}
+        <div className="absolute left-[15%] w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_12px_#22d3ee] animate-particle-1"></div>
+        <div className="absolute left-[35%] w-3 h-3 rounded-full bg-purple-400 shadow-[0_0_15px_#c084fc] animate-particle-2"></div>
+        <div className="absolute left-[55%] w-2.5 h-2.5 rounded-full bg-indigo-400 shadow-[0_0_14px_#818cf8] animate-particle-3"></div>
+        <div className="absolute left-[75%] w-2 h-2 rounded-full bg-cyan-300 shadow-[0_0_10px_#67e8f9] animate-particle-4"></div>
+        <div className="absolute left-[90%] w-3 h-3 rounded-full bg-pink-400 shadow-[0_0_16px_#f472b6] animate-particle-5"></div>
+      </div>
 
       {/* Header Logo */}
       <div className="flex items-center space-x-3 mb-8 relative z-10 cursor-pointer" onClick={() => navigate('/')}>
