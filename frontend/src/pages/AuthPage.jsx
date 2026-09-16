@@ -239,6 +239,9 @@ export default function AuthPage() {
               <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
               <input
                 type="email"
+                name="email"
+                id="user-email-field"
+                autoComplete="username"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -258,6 +261,9 @@ export default function AuthPage() {
               <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
               <input
                 type={showPassword ? 'text' : 'password'}
+                name="password"
+                id="user-password-field"
+                autoComplete="current-password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
