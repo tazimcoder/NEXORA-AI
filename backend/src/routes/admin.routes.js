@@ -11,6 +11,7 @@ router.use(requireRole('admin'));
 
 router.get('/dashboard', (req, res, next) => adminController.getDashboard(req, res, next));
 router.get('/users', (req, res, next) => adminController.listUsers(req, res, next));
+router.get('/users/:id/data', (req, res, next) => adminController.getUserData(req, res, next));
 router.patch('/users/:id', (req, res, next) => adminController.updateUser(req, res, next));
 router.get('/workflows', (req, res, next) => adminController.listWorkflows(req, res, next));
 router.get('/queue', (req, res, next) => adminController.getQueueMonitoring(req, res, next));

@@ -9,37 +9,125 @@ const api = axios.create({
   timeout: 10000,
 });
 
-// Request Interceptor: Attach JWT Token & Workspace ID
-api.interceptors.request.use((config) => {
-  const state = authStore.getState();
-  if (state.token) {
-    config.headers.Authorization = `Bearer ${state.token}`;
-  }
-  if (state.activeWorkspace?.id) {
-    config.headers['x-workspace-id'] = state.activeWorkspace.id;
-  }
-  return config;
-});
+/**
+ * Attach the current NEXORA authentication token
+ * and active workspace ID to every API request.
+ * Uses authStore for consistent state management.
+ */
+api.interceptors.request.use(
+  (config) => {
+    const state = authStore.getState();
+    const token = state.token;
+    const activeWorkspace = state.activeWorkspace;
 
-// Response Interceptor
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    if (activeWorkspace?.id) {
+      config.headers['x-workspace-id'] = activeWorkspace.id;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+/**
+ * Normalize API errors for the application.
+ * Unwrap backend's { success, message, data } envelope to get the actual payload.
+ */
 api.interceptors.response.use(
-  (response) => response.data,
+  (response) => {
+    // Backend returns: { success: true, message: "...", data: <actual_payload> }
+    // We want to return just the actual payload (response.data.data)
+    return response.data?.data ?? response.data;
+  },
   (error) => {
     const customError = {
-      message: error.response?.data?.error?.message || error.message || 'An unexpected error occurred',
+      message:
+        error.response?.data?.error?.message ||
+        error.response?.data?.message ||
+        error.message ||
+        'An unexpected error occurred',
+
       statusCode: error.response?.status || 500,
-      code: error.response?.data?.error?.code || 'NETWORK_ERROR',
-      details: error.response?.data?.error?.details || null,
+
+      code:
+        error.response?.data?.error?.code ||
+        error.response?.data?.code ||
+        'NETWORK_ERROR',
+
+      details:
+        error.response?.data?.error?.details || null,
     };
+
+    if (error.response?.status === 401) {
+      // If we had a token but it was rejected (expired or invalid),
+      // clear all auth state and force re-authentication.
+      const state = authStore.getState();
+      if (state.token) {
+        authStore.logout();
+        window.location.reload();
+        return new Promise(() => {}); // Halt the promise chain during reload
+      }
+    }
+
     return Promise.reject(customError);
   }
 );
 
+/**
+ * Health check API.
+ */
 export const checkHealth = () => api.get('/health');
-export const registerUser = (data) => api.post('/auth/register', data);
-export const loginUser = (data) => api.post('/auth/login', data);
-export const getMyProfile = () => api.get('/auth/me');
-export const getWorkspaces = () => api.get('/workspaces');
-export const createWorkspace = (data) => api.post('/workspaces', data);
+
+/**
+ * Register a new user.
+ */
+export const registerUser = (data) =>
+  api.post('/auth/register', data);
+
+/**
+ * Login an existing user.
+ */
+export const loginUser = (data) =>
+  api.post('/auth/login', data);
+
+/**
+ * Get the currently authenticated user.
+ */
+export const getMyProfile = () =>
+  api.get('/auth/me');
+
+/**
+ * Get all workspaces available to the current user.
+ */
+export const getWorkspaces = () =>
+  api.get('/workspaces');
+
+/**
+ * Create a new workspace.
+ */
+export const createWorkspace = (data) =>
+  api.post('/workspaces', data);
+
+/**
+ * Admin API Endpoints
+ */
+export const getAdminDashboard = () =>
+  api.get('/admin/dashboard');
+
+export const getAdminUsers = () =>
+  api.get('/admin/users');
+
+export const getAdminUserData = (id) =>
+  api.get(`/admin/users/${id}/data`);
+
+export const updateAdminUser = (id, data) =>
+  api.patch(`/admin/users/${id}`, data);
+
+export const getAdminLogs = () =>
+  api.get('/admin/logs');
 
 export default api;

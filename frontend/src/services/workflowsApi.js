@@ -3,46 +3,46 @@ import api from './api';
 export const workflowsApi = {
   getWorkflows: async () => {
     const response = await api.get('/workflows');
-    return response.data;
+    return response;
   },
 
   createWorkflow: async (payload) => {
     const response = await api.post('/workflows', payload);
-    return response.data;
+    return response;
   },
 
   getWorkflowById: async (id) => {
     const response = await api.get(`/workflows/${id}`);
-    return response.data;
+    return response;
   },
 
   updateWorkflow: async (id, payload) => {
     const response = await api.put(`/workflows/${id}`, payload);
-    return response.data;
+    return response;
   },
 
   publishWorkflow: async (id) => {
     const response = await api.post(`/workflows/${id}/publish`);
-    return response.data;
+    return response;
   },
 
   pauseWorkflow: async (id) => {
     const response = await api.post(`/workflows/${id}/pause`);
-    return response.data;
+    return response;
   },
 
   draftWorkflow: async (id) => {
     const response = await api.post(`/workflows/${id}/draft`);
-    return response.data;
+    return response;
   },
 
   validateWorkflow: async (id) => {
     const response = await api.post(`/workflows/${id}/validate`);
-    return response.data;
+    return response;
   },
 
   deleteWorkflow: async (id) => {
     const response = await api.delete(`/workflows/${id}`);
-    return response.data;
+    return response;
   },
 };

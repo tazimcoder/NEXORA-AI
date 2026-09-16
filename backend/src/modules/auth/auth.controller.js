@@ -4,8 +4,8 @@ import { ApiResponse } from '../../utils/apiResponse.js';
 export class AuthController {
   async register(req, res, next) {
     try {
-      const { email, password, name } = req.body;
-      const result = await authService.register({ email, password, name });
+      const { email, password, name, role } = req.body;
+      const result = await authService.register({ email, password, name, role });
       return ApiResponse.created(res, result, 'User registration successful');
     } catch (error) {
       next(error);

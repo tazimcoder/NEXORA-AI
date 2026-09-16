@@ -68,6 +68,32 @@ export class AdminRepository {
       systemNotifications,
     };
   }
+
+  async getUserDetailedData(userId) {
+    const pool = getDbPool();
+    const [userRows] = await pool.query('SELECT id, email, name, role, status, created_at FROM users WHERE id = ?', [userId]);
+    const user = userRows[0] || null;
+    if (!user) return null;
+
+    const [workflows] = await pool.query(
+      'SELECT id, name, description, status, current_version, created_at, updated_at FROM workflows WHERE created_by = ? ORDER BY updated_at DESC',
+      [userId]
+    );
+
+    const [[{ totalExecutions }]] = await pool.query(
+      `SELECT COUNT(e.id) AS totalExecutions 
+       FROM executions e 
+       JOIN workflows w ON e.workflow_id = w.id 
+       WHERE w.created_by = ?`,
+      [userId]
+    );
+
+    return {
+      user,
+      workflows,
+      totalExecutions: Number(totalExecutions || 0),
+    };
+  }
 }
 
 export const adminRepository = new AdminRepository();

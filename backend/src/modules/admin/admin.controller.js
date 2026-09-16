@@ -66,6 +66,16 @@ export class AdminController {
       next(error);
     }
   }
+
+  async getUserData(req, res, next) {
+    try {
+      const { id } = req.params;
+      const data = await adminService.getUserData(id);
+      return ApiResponse.success(res, data, 'User specific workflows & data telemetry retrieved');
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export const adminController = new AdminController();

@@ -1,244 +1,636 @@
 import { create } from 'zustand';
-import { addEdge, applyNodeChanges, applyEdgeChanges } from '@xyflow/react';
+import {
+addEdge,
+applyNodeChanges,
+applyEdgeChanges,
+} from '@xyflow/react';
+
 import { workflowsApi } from '../services/workflowsApi';
 import { getNodeMetadata } from '../features/builder/nodeTypes/nodeRegistry';
 
+const getErrorMessage = (error, fallback) => {
+return (
+  error?.message ||
+  error?.response?.data?.message ||
+  error?.response?.data?.error?.message ||
+  fallback
+);
+};
+
+const unwrapResponse = (response) => {
+if (response && typeof response === 'object' && 'data' in response) {
+return response.data;
+}
+
+// Response is already unwrapped by axios interceptor (new format)
+return response;
+};
+
+const normalizeDefinition = (definition) => {
+const safeDefinition = definition || {
+nodes: [],
+edges: [],
+};
+
+return {
+nodes: Array.isArray(safeDefinition.nodes)
+? safeDefinition.nodes
+: [],
+edges: Array.isArray(safeDefinition.edges)
+? safeDefinition.edges
+: [],
+};
+};
+
 export const useWorkflowStore = create((set, get) => ({
-  workflow: null,
-  nodes: [],
-  edges: [],
-  selectedNode: null,
-  isDirty: false,
-  isLoading: false,
-  isSaving: false,
-  isPublishing: false,
-  isValidating: false,
-  validationResult: null,
+workflow: null,
+nodes: [],
+edges: [],
+selectedNode: null,
+
+isDirty: false,
+isLoading: false,
+isSaving: false,
+isPublishing: false,
+isValidating: false,
+
+validationResult: null,
+error: null,
+successMessage: null,
+
+setSuccessMessage: (message) => {
+set({
+successMessage: message,
+});
+},
+
+setError: (error) => {
+set({
+error,
+});
+},
+
+clearStatus: () => {
+set({
+error: null,
+successMessage: null,
+});
+},
+
+onNodesChange: (changes) => {
+set((state) => ({
+nodes: applyNodeChanges(changes, state.nodes),
+isDirty: true,
+}));
+},
+
+onEdgesChange: (changes) => {
+set((state) => ({
+edges: applyEdgeChanges(changes, state.edges),
+isDirty: true,
+}));
+},
+
+onConnect: (connection) => {
+set((state) => ({
+edges: addEdge(
+{
+...connection,
+id: `edge_${connection.source}_${connection.sourceHandle || 'default'}_${connection.target}_${connection.targetHandle || 'default'}_${Date.now()}`,
+animated: true,
+style: {
+stroke: '#38bdf8',
+strokeWidth: 2,
+},
+},
+state.edges
+),
+isDirty: true,
+}));
+},
+
+selectNode: (node) => {
+set({
+selectedNode: node,
+});
+},
+
+addNode: (
+type,
+subtype,
+position = {
+x: 250,
+y: 250,
+}
+) => {
+const metadata = getNodeMetadata(type, subtype);
+
+
+if (!metadata) {
+  set({
+    error: `Unknown node type: ${type}/${subtype}`,
+  });
+
+  return;
+}
+
+const id = `node_${type}_${subtype}_${Date.now()}`;
+
+const newNode = {
+  id,
+  type,
+  position,
+
+  data: {
+    label: metadata.label,
+    type,
+    subtype,
+
+    config: {
+      ...(metadata.defaultConfig || {}),
+    },
+  },
+};
+
+set((state) => ({
+  nodes: [
+    ...state.nodes,
+    newNode,
+  ],
+
+  selectedNode: newNode,
+  isDirty: true,
+}));
+
+
+},
+
+updateNodeConfig: (nodeId, updatedData) => {
+set((state) => {
+const updatedNodes = state.nodes.map((node) => {
+if (node.id !== nodeId) {
+return node;
+}
+
+
+    return {
+      ...node,
+
+      data: {
+        ...node.data,
+        ...updatedData,
+
+        config: {
+          ...node.data.config,
+          ...(updatedData.config || {}),
+        },
+      },
+    };
+  });
+
+  const selectedNode =
+    updatedNodes.find(
+      (node) => node.id === nodeId
+    ) || state.selectedNode;
+
+  return {
+    nodes: updatedNodes,
+    selectedNode,
+    isDirty: true,
+  };
+});
+
+
+},
+
+deleteNode: (nodeId) => {
+set((state) => ({
+nodes: state.nodes.filter(
+(node) => node.id !== nodeId
+),
+
+
+  edges: state.edges.filter(
+    (edge) =>
+      edge.source !== nodeId &&
+      edge.target !== nodeId
+  ),
+
+  selectedNode:
+    state.selectedNode?.id === nodeId
+      ? null
+      : state.selectedNode,
+
+  isDirty: true,
+}));
+
+
+},
+
+duplicateNode: (nodeId) => {
+const state = get();
+
+
+const sourceNode = state.nodes.find(
+  (node) => node.id === nodeId
+);
+
+if (!sourceNode) {
+  set({
+    error: 'Node not found',
+  });
+
+  return;
+}
+
+const duplicatedNode = {
+  ...sourceNode,
+
+  id: `node_${sourceNode.type}_${Date.now()}`,
+
+  position: {
+    x: sourceNode.position.x + 50,
+    y: sourceNode.position.y + 50,
+  },
+
+  data: JSON.parse(
+    JSON.stringify({
+      ...sourceNode.data,
+
+      label: `${sourceNode.data.label} Copy`,
+    })
+  ),
+};
+
+set({
+  nodes: [
+    ...state.nodes,
+    duplicatedNode,
+  ],
+
+  selectedNode: duplicatedNode,
+  isDirty: true,
+});
+
+
+},
+
+loadWorkflow: async (id) => {
+set({
+isLoading: true,
+error: null,
+successMessage: null,
+validationResult: null,
+});
+
+
+try {
+  const response =
+    await workflowsApi.getWorkflowById(id);
+
+  const workflow = unwrapResponse(response);
+
+  if (!workflow?.id) {
+    throw new Error(
+      'Workflow not found or invalid server response'
+    );
+  }
+
+  const definition = normalizeDefinition(
+    workflow.definition_json
+  );
+
+  const nodes = definition.nodes.map(
+    (node) => ({
+      id: node.id,
+
+      type: node.type || 'action',
+
+      position:
+        node.position || {
+          x: 100,
+          y: 100,
+        },
+
+      data: {
+        label:
+          node.label ||
+          node.data?.label ||
+          node.id,
+
+        type:
+          node.type ||
+          node.data?.type ||
+          'action',
+
+        subtype:
+          node.subtype ||
+          node.data?.subtype ||
+          null,
+
+        config:
+          node.config ||
+          node.data?.config ||
+          {},
+      },
+    })
+  );
+
+  const edges = definition.edges.map(
+    (edge, index) => ({
+      id:
+        edge.id ||
+        `edge_${edge.source}_${edge.target}_${index}`,
+
+      source: edge.source,
+      target: edge.target,
+
+      sourceHandle:
+        edge.sourceHandle || null,
+
+      targetHandle:
+        edge.targetHandle || null,
+
+      animated: true,
+
+      style: {
+        stroke: '#38bdf8',
+        strokeWidth: 2,
+      },
+    })
+  );
+
+  set({
+    workflow,
+    nodes,
+    edges,
+
+    selectedNode: null,
+
+    isDirty: false,
+    isLoading: false,
+  });
+} catch (error) {
+  set({
+    error: getErrorMessage(
+      error,
+      'Failed to load workflow'
+    ),
+
+    isLoading: false,
+  });
+}
+
+
+},
+
+saveWorkflow: async () => {
+const {
+workflow,
+nodes,
+edges,
+} = get();
+
+
+if (!workflow?.id) {
+  set({
+    error: 'No workflow selected',
+  });
+
+  return false;
+}
+
+set({
+  isSaving: true,
   error: null,
   successMessage: null,
+});
 
-  setSuccessMessage: (msg) => set({ successMessage: msg }),
-  setError: (err) => set({ error: err }),
-  clearStatus: () => set({ error: null, successMessage: null }),
+try {
+  const definition = {
+    nodes: nodes.map((node) => ({
+      id: node.id,
 
-  onNodesChange: (changes) => {
-    set((state) => ({
-      nodes: applyNodeChanges(changes, state.nodes),
-      isDirty: true,
-    }));
-  },
+      type: node.type,
 
-  onEdgesChange: (changes) => {
-    set((state) => ({
-      edges: applyEdgeChanges(changes, state.edges),
-      isDirty: true,
-    }));
-  },
+      subtype:
+        node.data?.subtype || null,
 
-  onConnect: (connection) => {
-    set((state) => ({
-      edges: addEdge({ ...connection, animated: true, style: { stroke: '#38bdf8', strokeWidth: 2 } }, state.edges),
-      isDirty: true,
-    }));
-  },
+      label:
+        node.data?.label ||
+        node.id,
 
-  selectNode: (node) => {
-    set({ selectedNode: node });
-  },
+      config:
+        node.data?.config || {},
 
-  addNode: (type, subtype, position = { x: 250, y: 250 }) => {
-    const meta = getNodeMetadata(type, subtype);
-    const id = `node_${type}_${Date.now()}`;
+      position: node.position,
+    })),
 
-    const newNode = {
-      id,
-      type, // 'trigger' | 'condition' | 'action'
-      position,
-      data: {
-        label: meta.label,
-        type,
-        subtype,
-        config: { ...meta.defaultConfig },
-      },
-    };
+    edges: edges.map((edge) => ({
+      id: edge.id,
 
-    set((state) => ({
-      nodes: [...state.nodes, newNode],
-      selectedNode: newNode,
-      isDirty: true,
-    }));
-  },
+      source: edge.source,
+      target: edge.target,
 
-  updateNodeConfig: (nodeId, updatedData) => {
-    set((state) => {
-      const updatedNodes = state.nodes.map((n) => {
-        if (n.id === nodeId) {
-          return {
-            ...n,
-            data: {
-              ...n.data,
-              ...updatedData,
-            },
-          };
-        }
-        return n;
-      });
+      sourceHandle:
+        edge.sourceHandle || null,
 
-      const activeNode = updatedNodes.find((n) => n.id === nodeId);
-      return {
-        nodes: updatedNodes,
-        selectedNode: activeNode || state.selectedNode,
-        isDirty: true,
-      };
-    });
-  },
+      targetHandle:
+        edge.targetHandle || null,
+    })),
+  };
 
-  deleteNode: (nodeId) => {
-    set((state) => ({
-      nodes: state.nodes.filter((n) => n.id !== nodeId),
-      edges: state.edges.filter((e) => e.source !== nodeId && e.target !== nodeId),
-      selectedNode: state.selectedNode?.id === nodeId ? null : state.selectedNode,
-      isDirty: true,
-    }));
-  },
+  const response =
+    await workflowsApi.updateWorkflow(
+      workflow.id,
+      {
+        definition,
+      }
+    );
 
-  duplicateNode: (nodeId) => {
-    const state = get();
-    const sourceNode = state.nodes.find((n) => n.id === nodeId);
-    if (!sourceNode) return;
+  const updatedWorkflow =
+    unwrapResponse(response);
 
-    const newId = `node_${sourceNode.type}_${Date.now()}`;
-    const duplicatedNode = {
-      ...sourceNode,
-      id: newId,
-      position: { x: sourceNode.position.x + 40, y: sourceNode.position.y + 40 },
-      data: {
-        ...JSON.parse(JSON.stringify(sourceNode.data)),
-        label: `${sourceNode.data.label} (Copy)`,
-      },
-    };
+  set({
+    workflow:
+      updatedWorkflow?.id
+        ? updatedWorkflow
+        : workflow,
 
-    set({
-      nodes: [...state.nodes, duplicatedNode],
-      selectedNode: duplicatedNode,
-      isDirty: true,
-    });
-  },
+    isDirty: false,
+    isSaving: false,
 
-  loadWorkflow: async (id) => {
-    set({ isLoading: true, error: null });
-    try {
-      const res = await workflowsApi.getWorkflowById(id);
-      const wf = res.data;
-      const def = wf.definition_json || { nodes: [], edges: [] };
+    successMessage:
+      'Workflow saved successfully',
+  });
 
-      // Ensure nodes have proper React Flow visual structure
-      const rfNodes = (def.nodes || []).map((n) => ({
-        id: n.id,
-        type: n.type || 'action',
-        position: n.position || { x: 100, y: 100 },
-        data: {
-          label: n.label || n.id,
-          type: n.type,
-          subtype: n.subtype,
-          config: n.config || {},
-        },
-      }));
+  return true;
+} catch (error) {
+  set({
+    error: getErrorMessage(
+      error,
+      'Failed to save workflow'
+    ),
 
-      const rfEdges = (def.edges || []).map((e) => ({
-        id: e.id || `e_${e.source}_${e.target}`,
-        source: e.source,
-        target: e.target,
-        sourceHandle: e.sourceHandle || null,
-        targetHandle: e.targetHandle || null,
-        animated: true,
-        style: { stroke: '#38bdf8', strokeWidth: 2 },
-      }));
+    isSaving: false,
+  });
 
+  return false;
+}
+
+
+},
+
+validateWorkflow: async () => {
+const {
+workflow,
+} = get();
+
+
+if (!workflow?.id) {
+  set({
+    error: 'No workflow selected',
+  });
+
+  return;
+}
+
+set({
+  isValidating: true,
+  error: null,
+  successMessage: null,
+  validationResult: null,
+});
+
+try {
+  const response =
+    await workflowsApi.validateWorkflow(
+      workflow.id
+    );
+
+  const result =
+    unwrapResponse(response);
+
+  const isValid =
+    Boolean(
+      result?.isValid ??
+      result?.valid
+    );
+
+  const errors =
+    Array.isArray(result?.errors)
+      ? result.errors
+      : [];
+
+  set({
+    validationResult: result,
+    isValidating: false,
+
+    successMessage: isValid
+      ? 'Workflow validation passed successfully.'
+      : null,
+
+    error: !isValid
+      ? errors.length > 0
+        ? `Validation failed: ${errors.join('; ')}`
+        : 'Workflow validation failed'
+      : null,
+  });
+
+  return isValid;
+} catch (error) {
+  set({
+    error: getErrorMessage(
+      error,
+      'Failed to validate workflow'
+    ),
+
+    isValidating: false,
+  });
+
+  return false;
+}
+
+
+},
+
+publishWorkflow: async () => {
+const {
+workflow,
+isDirty,
+} = get();
+
+
+if (!workflow?.id) {
+  set({
+    error: 'No workflow selected',
+  });
+
+  return;
+}
+
+set({
+  isPublishing: true,
+  error: null,
+  successMessage: null,
+});
+
+try {
+  if (isDirty) {
+    const saved =
+      await get().saveWorkflow();
+
+    if (!saved) {
       set({
-        workflow: wf,
-        nodes: rfNodes,
-        edges: rfEdges,
-        isDirty: false,
-        isLoading: false,
-      });
-    } catch (err) {
-      set({ error: err.response?.data?.message || err.message, isLoading: false });
-    }
-  },
-
-  saveWorkflow: async () => {
-    const { workflow, nodes, edges } = get();
-    if (!workflow) return;
-
-    set({ isSaving: true, error: null });
-    try {
-      // Transform React Flow state to backend AST definition format
-      const definition = {
-        nodes: nodes.map((n) => ({
-          id: n.id,
-          type: n.type,
-          subtype: n.data.subtype,
-          label: n.data.label,
-          config: n.data.config || {},
-          position: n.position,
-        })),
-        edges: edges.map((e) => ({
-          id: e.id,
-          source: e.source,
-          target: e.target,
-          sourceHandle: e.sourceHandle || null,
-          targetHandle: e.targetHandle || null,
-        })),
-      };
-
-      const res = await workflowsApi.updateWorkflow(workflow.id, { definition });
-      set({
-        workflow: res.data,
-        isDirty: false,
-        isSaving: false,
-        successMessage: 'Workflow saved successfully',
-      });
-    } catch (err) {
-      set({ error: err.response?.data?.message || err.message, isSaving: false });
-    }
-  },
-
-  validateWorkflow: async () => {
-    const { workflow } = get();
-    if (!workflow) return;
-
-    set({ isValidating: true, error: null });
-    try {
-      const res = await workflowsApi.validateWorkflow(workflow.id);
-      set({
-        validationResult: res.data,
-        isValidating: false,
-        successMessage: res.data.isValid ? 'Workflow graph is 100% valid!' : null,
-        error: !res.data.isValid ? `Validation failed: ${res.data.errors.join('; ')}` : null,
-      });
-    } catch (err) {
-      set({ error: err.response?.data?.message || err.message, isValidating: false });
-    }
-  },
-
-  publishWorkflow: async () => {
-    const { workflow } = get();
-    if (!workflow) return;
-
-    // Save first before publishing
-    await get().saveWorkflow();
-
-    set({ isPublishing: true, error: null });
-    try {
-      const res = await workflowsApi.publishWorkflow(workflow.id);
-      set({
-        workflow: res.data,
         isPublishing: false,
-        successMessage: `Workflow version ${res.data.current_version - 1} published successfully!`,
       });
-    } catch (err) {
-      set({ error: err.response?.data?.message || err.message, isPublishing: false });
+
+      return;
     }
-  },
+  }
+
+  const isValid =
+    await get().validateWorkflow();
+
+  if (!isValid) {
+    set({
+      isPublishing: false,
+    });
+
+    return;
+  }
+
+  const response =
+    await workflowsApi.publishWorkflow(
+      workflow.id
+    );
+
+  const publishedWorkflow =
+    unwrapResponse(response);
+
+  set({
+    workflow:
+      publishedWorkflow?.id
+        ? publishedWorkflow
+        : get().workflow,
+
+    isDirty: false,
+    isPublishing: false,
+
+    successMessage:
+      'Workflow published successfully.',
+  });
+} catch (error) {
+  set({
+    error: getErrorMessage(
+      error,
+      'Failed to publish workflow'
+    ),
+
+    isPublishing: false,
+  });
+}
+
+
+},
 }));

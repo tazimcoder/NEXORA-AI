@@ -21,13 +21,14 @@ export default function AuthModal({ isOpen, onClose }) {
     try {
       if (isLogin) {
         const response = await loginUser({ email, password });
-        authStore.setAuthData(response.data.user, response.data.tokens, response.data.workspaces);
+        // response is now the unwrapped payload: { user, workspaces, tokens }
+        authStore.setAuthData(response.user, response.tokens, response.workspaces);
       } else {
         const response = await registerUser({ email, password, name });
         authStore.setAuthData(
-          response.data.user,
-          response.data.tokens,
-          response.data.workspace ? [response.data.workspace] : []
+          response.user,
+          response.tokens,
+          response.workspace ? [response.workspace] : []
         );
       }
       onClose();

@@ -87,6 +87,14 @@ export class AdminService {
   async getSystemLogs() {
     return await adminRepository.getSystemAuditAndRecoveryLogs();
   }
+
+  async getUserData(userId) {
+    const data = await adminRepository.getUserDetailedData(userId);
+    if (!data) {
+      throw ApiError.notFound(`User [${userId}] not found`);
+    }
+    return data;
+  }
 }
 
 export const adminService = new AdminService();

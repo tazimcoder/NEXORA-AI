@@ -15,7 +15,7 @@ export const initRedis = async () => {
       db: config.redis.db,
       lazyConnect: true,
       enableOfflineQueue: false,
-      maxRetriesPerRequest: 1,
+      maxRetriesPerRequest: null,
       connectTimeout: 1000,
     });
 

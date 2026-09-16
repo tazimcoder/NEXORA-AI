@@ -1,19 +1,65 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
+
+import AuthPage from './pages/AuthPage';
 import { WorkflowsListPage } from './pages/WorkflowsListPage';
 import { WorkflowBuilderPage } from './pages/WorkflowBuilderPage';
 import AdminPanelPage from './pages/AdminPanelPage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/workflows" element={<WorkflowsListPage />} />
-        <Route path="/workflows/:id" element={<WorkflowBuilderPage />} />
-        <Route path="/admin" element={<AdminPanelPage />} />
-        <Route path="*" element={<Navigate to="/workflows" replace />} />
+        {/* Public Login / Register Page */}
+        <Route path="/login" element={<AuthPage />} />
+
+        {/* Protected User Workflows Routes */}
+        <Route
+          path="/workflows"
+          element={
+            <ProtectedRoute>
+              <WorkflowsListPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/workflows/:id"
+          element={
+            <ProtectedRoute>
+              <WorkflowBuilderPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Strictly Protected Admin Panel Route */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute requireAdmin={true}>
+              <AdminPanelPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Root Redirect */}
+        <Route
+          path="/"
+          element={<Navigate to="/workflows" replace />}
+        />
+
+        {/* Catch-all Redirect */}
+        <Route
+          path="*"
+          element={<Navigate to="/workflows" replace />}
+        />
       </Routes>
     </BrowserRouter>
   );
 }
-

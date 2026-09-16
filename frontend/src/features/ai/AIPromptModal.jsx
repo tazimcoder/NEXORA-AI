@@ -22,9 +22,10 @@ export const AIPromptModal = ({ isOpen, onClose }) => {
 
     try {
       const res = await api.post('/ai/generate-plan', { prompt: prompt.trim() });
-      setProposal(res.data.data);
+      // res is now the unwrapped payload
+      setProposal(res);
     } catch (err) {
-      setError(err.response?.data?.message || err.message);
+      setError(err.message || 'Failed to generate plan');
     } finally {
       setIsGenerating(false);
     }
@@ -39,9 +40,10 @@ export const AIPromptModal = ({ isOpen, onClose }) => {
     try {
       const res = await api.post('/ai/approve-plan', proposal.workflowProposal);
       onClose();
-      navigate(`/workflows/${res.data.data.id}`);
+      // res is now the unwrapped payload with workflow ID
+      navigate(`/workflows/${res.id}`);
     } catch (err) {
-      setError(err.response?.data?.message || err.message);
+      setError(err.message || 'Failed to approve plan');
     } finally {
       setIsApproving(false);
     }

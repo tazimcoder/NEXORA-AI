@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import crypto from 'node:crypto';
 import { config } from '../../config/index.js';
 import { authRepository } from './auth.repository.js';
 import { workspacesRepository } from '../workspaces/workspaces.repository.js';
@@ -32,7 +33,14 @@ export class AuthService {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const user = await authRepository.createUser({ email, passwordHash, name });
+    
+    // Check if this is the very first user in the system database
+    const pool = (await import('../../config/db.config.js')).getDbPool();
+    const [[{ userCount }]] = await pool.query('SELECT COUNT(*) AS userCount FROM users');
+    
+    // First user becomes system admin, all subsequent public signups are strictly 'user'
+    const assignedRole = Number(userCount) === 0 ? 'admin' : 'user';
+    const user = await authRepository.createUser({ email, passwordHash, name, role: assignedRole });
 
     // Create a default Personal Workspace for the new user
     const slug = `${name.toLowerCase().replace(/[^a-z0-9]/g, '')}-${user.id.slice(0, 6)}`;
@@ -43,6 +51,23 @@ export class AuthService {
     });
 
     logger.info(`Registered new user: ${user.email} with personal workspace: ${workspace.name}`);
+
+    try {
+      await pool.query(
+        'INSERT INTO audit_logs (id, workspace_id, user_id, action, resource_type, resource_id, metadata_json, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())',
+        [
+          crypto.randomUUID(),
+          workspace.id,
+          user.id,
+          'USER_REGISTERED',
+          'user',
+          user.id,
+          JSON.stringify({ email: user.email, name: user.name, role: user.role })
+        ]
+      );
+    } catch (auditErr) {
+      logger.warn(`Audit log error on register: ${auditErr.message}`);
+    }
 
     const tokens = this.generateTokens(user);
 
@@ -77,6 +102,25 @@ export class AuthService {
     const tokens = this.generateTokens(user);
 
     logger.info(`User logged in: ${user.email}`);
+
+    try {
+      const pool = (await import('../../config/db.config.js')).getDbPool();
+      await pool.query('UPDATE users SET updated_at = NOW() WHERE id = ?', [user.id]);
+      await pool.query(
+        'INSERT INTO audit_logs (id, workspace_id, user_id, action, resource_type, resource_id, metadata_json, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())',
+        [
+          crypto.randomUUID(),
+          workspaces[0]?.id || null,
+          user.id,
+          'USER_LOGIN',
+          'user',
+          user.id,
+          JSON.stringify({ email: user.email, role: user.role, name: user.name })
+        ]
+      );
+    } catch (auditErr) {
+      logger.warn(`Audit log error on login: ${auditErr.message}`);
+    }
 
     return {
       user: {
