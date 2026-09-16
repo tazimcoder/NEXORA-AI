@@ -58,6 +58,9 @@ export default function LandingPage() {
   // Active Flow Diagram Tab state
   const [activeDiagramFlow, setActiveDiagramFlow] = useState('prompt');
 
+  // Active Step state for User Guide
+  const [activeStep, setActiveStep] = useState(1);
+
   // Agent tab state
   const [activeAgentTab, setActiveAgentTab] = useState('research');
 
