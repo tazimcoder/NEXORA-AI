@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { loginUser, registerUser } from '../services/api';
 import { authStore } from '../store/authStore';
-import { Lock, Mail, User, ArrowRight, Zap, CheckCircle2, ShieldCheck, AlertCircle } from 'lucide-react';
+import { Lock, Mail, User, ArrowRight, Zap, CheckCircle2, ShieldCheck, AlertCircle, Eye, EyeOff, Sparkles, Key } from 'lucide-react';
 
 const DISPOSABLE_DOMAINS = [
   'tempmail.com', 'mailinator.com', '10minutemail.com', 'dispostable.com',
@@ -40,6 +40,7 @@ export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -265,24 +266,53 @@ export default function AuthPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">Password</label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-semibold text-slate-300">Password</label>
+              {isLogin && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail('admin@nexora.ai');
+                    setPassword('123456');
+                  }}
+                  className="text-[11px] text-cyan-400 hover:text-cyan-300 font-medium flex items-center gap-1 transition-colors"
+                  title="Auto-fill Demo Credentials"
+                >
+                  <Sparkles className="w-3 h-3 text-cyan-400 animate-pulse" />
+                  <span>Fill Demo Login</span>
+                </button>
+              )}
+            </div>
             <div className="relative">
               <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 transition-colors placeholder:text-slate-600"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-11 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all placeholder:text-slate-600"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-2.5 p-1 text-slate-400 hover:text-cyan-400 transition-colors focus:outline-none"
+                title={showPassword ? 'Hide Password' : 'Show Password'}
+                aria-label={showPassword ? 'Hide Password' : 'Show Password'}
+              >
+                {showPassword ? (
+                  <EyeOff className="w-4 h-4 text-cyan-400" />
+                ) : (
+                  <Eye className="w-4 h-4 text-slate-400 hover:text-slate-200" />
+                )}
+              </button>
             </div>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-2 py-3 rounded-xl bg-gradient-to-r from-brand-600 via-brand-500 to-cyan-500 hover:from-brand-500 hover:to-cyan-400 text-white font-extrabold text-sm transition-all shadow-lg shadow-brand-600/30 flex items-center justify-center space-x-2 disabled:opacity-50 active:scale-[0.99]"
+            className="w-full mt-2 py-3 rounded-xl bg-gradient-to-r from-brand-600 via-brand-500 to-cyan-500 hover:from-brand-500 hover:to-cyan-400 text-white font-extrabold text-sm transition-all shadow-lg shadow-brand-600/30 hover:shadow-brand-500/50 flex items-center justify-center space-x-2 disabled:opacity-50 active:scale-[0.99]"
           >
             <span>{loading ? 'Authenticating...' : isLogin ? 'Sign In to Workspace' : 'Create Account'}</span>
             <ArrowRight className="w-4 h-4" />
