@@ -52,3 +52,123 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #374151;
 }
+
+/* Background Animations & Glowing Effects */
+@keyframes float-slow {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(40px, -50px) scale(1.15);
+  }
+  66% {
+    transform: translate(-30px, 35px) scale(0.9);
+  }
+}
+
+@keyframes float-reverse {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(-50px, 45px) scale(0.85);
+  }
+  66% {
+    transform: translate(35px, -40px) scale(1.1);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(1.12);
+  }
+}
+
+@keyframes grid-move {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 64px 64px;
+  }
+}
+
+@keyframes particle-rise {
+  0% {
+    transform: translateY(105vh) scale(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  80% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-5vh) scale(1.4);
+    opacity: 0;
+  }
+}
+
+@keyframes beam-slide {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.5;
+  }
+  70% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(200%) translateY(200%) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+.animate-blob-slow {
+  animation: float-slow 16s ease-in-out infinite;
+}
+
+.animate-blob-reverse {
+  animation: float-reverse 22s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 9s ease-in-out infinite;
+}
+
+.animate-grid-move {
+  animation: grid-move 25s linear infinite;
+}
+
+.animate-particle-1 {
+  animation: particle-rise 12s ease-in-out infinite;
+}
+
+.animate-particle-2 {
+  animation: particle-rise 16s ease-in-out infinite 3s;
+}
+
+.animate-particle-3 {
+  animation: particle-rise 14s ease-in-out infinite 6s;
+}
+
+.animate-particle-4 {
+  animation: particle-rise 18s ease-in-out infinite 9s;
+}
+
+.animate-particle-5 {
+  animation: particle-rise 15s ease-in-out infinite 11s;
+}
+
+.animate-beam {
+  animation: beam-slide 10s ease-in-out infinite;
+}
+
