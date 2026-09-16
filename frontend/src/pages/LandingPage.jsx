@@ -283,15 +283,11 @@ Header: x-workspace-id: ws_prod_94028`,
               </div>
             </div>
             <div>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1">
                 <span className="text-xl font-black tracking-tight bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
                   NEXORA
                 </span>
                 <span className="text-xl font-black text-cyan-400">.AI</span>
-                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping mr-1"></span>
-                  LIVE
-                </span>
               </div>
               <span className="hidden sm:block text-[9px] tracking-widest text-indigo-300/80 uppercase font-bold">
                 Autonomous Workflow Engine
