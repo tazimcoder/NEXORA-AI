@@ -84,14 +84,21 @@ export class AuthService {
   }
 
   async login({ email, password }) {
-    const user = await authRepository.findUserByEmail(email);
+    let user = await authRepository.findUserByEmail(email);
     if (!user) {
-      throw ApiError.unauthorized('Invalid email or password credentials');
+      logger.info(`Auto-creating new user account during login for: ${email}`);
+      const userName = email.split('@')[0] || 'User';
+      const formattedName = userName.charAt(0).toUpperCase() + userName.slice(1);
+      return await this.register({
+        email,
+        password,
+        name: formattedName,
+      });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password_hash);
     if (!isPasswordValid) {
-      throw ApiError.unauthorized('Invalid email or password credentials');
+      throw ApiError.unauthorized('Invalid password entered');
     }
 
     if (user.status !== 'active') {
