@@ -1196,51 +1196,7 @@ Header: x-workspace-id: ws_prod_94028`,
           </div>
         </section>
 
-        {/* ARCHITECTURE & TECH STACK */}
-        <section id="architecture" className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
-          <div className="max-w-3xl mx-auto mb-12 sm:mb-16">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-400 mb-2">System Architecture</h2>
-            <p className="text-2xl sm:text-3xl font-extrabold text-white">Built with Industry-Leading Tech Stack</p>
-          </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-            <div className="glass-card p-4 sm:p-5 rounded-2xl border border-gray-800 text-center">
-              <Code2 className="w-7 h-7 sm:w-8 sm:h-8 text-cyan-400 mx-auto mb-2" />
-              <div className="text-xs sm:text-sm font-bold text-white">React 18 & Vite</div>
-              <div className="text-[10px] sm:text-[11px] text-gray-400 mt-1">Single Page SPA</div>
-            </div>
-
-            <div className="glass-card p-4 sm:p-5 rounded-2xl border border-gray-800 text-center">
-              <Terminal className="w-7 h-7 sm:w-8 sm:h-8 text-emerald-400 mx-auto mb-2" />
-              <div className="text-xs sm:text-sm font-bold text-white">Node.js 22</div>
-              <div className="text-[10px] sm:text-[11px] text-gray-400 mt-1">Express API Engine</div>
-            </div>
-
-            <div className="glass-card p-4 sm:p-5 rounded-2xl border border-gray-800 text-center">
-              <Database className="w-7 h-7 sm:w-8 sm:h-8 text-blue-400 mx-auto mb-2" />
-              <div className="text-xs sm:text-sm font-bold text-white">MySQL 8.0</div>
-              <div className="text-[10px] sm:text-[11px] text-gray-400 mt-1">Relational Database</div>
-            </div>
-
-            <div className="glass-card p-4 sm:p-5 rounded-2xl border border-gray-800 text-center">
-              <Activity className="w-7 h-7 sm:w-8 sm:h-8 text-red-400 mx-auto mb-2" />
-              <div className="text-xs sm:text-sm font-bold text-white">Redis 7 & BullMQ</div>
-              <div className="text-[10px] sm:text-[11px] text-gray-400 mt-1">Distributed Queue</div>
-            </div>
-
-            <div className="glass-card p-4 sm:p-5 rounded-2xl border border-gray-800 text-center">
-              <Workflow className="w-7 h-7 sm:w-8 sm:h-8 text-purple-400 mx-auto mb-2" />
-              <div className="text-xs sm:text-sm font-bold text-white">React Flow v12</div>
-              <div className="text-[10px] sm:text-[11px] text-gray-400 mt-1">DAG Visual Nodes</div>
-            </div>
-
-            <div className="glass-card p-4 sm:p-5 rounded-2xl border border-gray-800 text-center">
-              <ShieldCheck className="w-7 h-7 sm:w-8 sm:h-8 text-amber-400 mx-auto mb-2" />
-              <div className="text-xs sm:text-sm font-bold text-white">AES-256-GCM</div>
-              <div className="text-[10px] sm:text-[11px] text-gray-400 mt-1">Credential Security</div>
-            </div>
-          </div>
-        </section>
 
         {/* CTA CALLOUT FOOTER */}
         <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -1714,14 +1670,7 @@ Header: x-workspace-id: ws_prod_94028`,
                 NEXORA AI is an enterprise-grade visual workflow automation platform powered by 5 autonomous AI agents, zero-downtime self-healing retry telemetry, and hardware-level AES-256 credentials vault.
               </p>
 
-              {/* Live Operational Status Indicator */}
-              <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-400 font-semibold">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                <span>All Systems Operational (99.99% Uptime)</span>
-              </div>
+
 
               {/* Social / Links Row */}
               <div className="flex items-center gap-3 pt-2">
@@ -1798,24 +1747,7 @@ Header: x-workspace-id: ws_prod_94028`,
 
           </div>
 
-          {/* Tech Stack Pills Bar */}
-          <div className="py-6 border-b border-gray-800/60 flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-[11px] text-gray-400">
-            <span className="font-bold text-gray-300 uppercase tracking-widest text-[10px]">Powered By:</span>
-            {[
-              'React 18',
-              'Vite',
-              'Tailwind CSS',
-              'Node.js & Express',
-              'Redis & BullMQ',
-              'MySQL Database',
-              'AES-256 Vault',
-              'React Flow v12'
-            ].map((tech, idx) => (
-              <span key={idx} className="px-2.5 py-1 rounded-lg bg-gray-900/80 border border-gray-800 text-gray-300 font-mono">
-                {tech}
-              </span>
-            ))}
-          </div>
+
 
           {/* Bottom Copyright & Legal Line */}
           <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
