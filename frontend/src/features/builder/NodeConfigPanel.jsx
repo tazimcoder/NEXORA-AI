@@ -127,6 +127,75 @@ export const NodeConfigPanel = () => {
           </>
         )}
 
+        {/* Telegram Action parameters */}
+        {(selectedNode.data.subtype === 'telegram' || selectedNode.data.label?.toLowerCase().includes('telegram')) && (
+          <div className="space-y-2.5 pt-2 border-t border-slate-800">
+            <span className="text-[11px] font-bold text-sky-400 block uppercase tracking-wider">Telegram Bot Dispatcher</span>
+            <div>
+              <label className="block text-xs font-semibold text-slate-400 mb-1">Telegram Bot Token</label>
+              <input
+                type="text"
+                value={config.botToken || ''}
+                onChange={(e) => handleConfigChange('botToken', e.target.value)}
+                placeholder="123456789:ABCdefGhIJKlmNoPQRs..."
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-sky-500 font-mono"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-400 mb-1">Telegram Chat ID / Channel</label>
+              <input
+                type="text"
+                value={config.chatId || ''}
+                onChange={(e) => handleConfigChange('chatId', e.target.value)}
+                placeholder="e.g. 123456789 or @mychannel"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-sky-500 font-mono"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-400 mb-1">Message Body</label>
+              <textarea
+                value={config.message || '🚀 NEXORA AI Real-Time Alert: Workflow Executed Successfully!'}
+                onChange={(e) => handleConfigChange('message', e.target.value)}
+                rows={2}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-sky-500"
+              />
+            </div>
+
+            <button
+              type="button"
+              onClick={async () => {
+                const token = config.botToken;
+                const chat = config.chatId;
+                const msg = config.message || '🚀 NEXORA AI Real-Time Alert: Workflow Executed Successfully!';
+                
+                if (!token || !chat) {
+                  alert('⚠️ Please enter your real Telegram Bot Token and Chat ID below!');
+                  return;
+                }
+
+                try {
+                  const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: chat, text: msg }),
+                  });
+                  const data = await res.json();
+                  if (data.ok) {
+                    alert('🎉 SUCCESS! Real message has been sent to your Telegram app!');
+                  } else {
+                    alert(`❌ Telegram Error: ${data.description}`);
+                  }
+                } catch (err) {
+                  alert(`❌ Network Error: ${err.message}`);
+                }
+              }}
+              className="w-full mt-2 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-extrabold text-xs py-2.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5"
+            >
+              <span>📲 Send Real Telegram Message Now</span>
+            </button>
+          </div>
+        )}
+
         {/* Notification Action parameters */}
         {selectedNode.data.subtype === 'create_notification' && (
           <>
