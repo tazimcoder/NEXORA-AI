@@ -271,59 +271,97 @@ Header: x-workspace-id: ws_prod_94028`,
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f293715_1px,transparent_1px),linear-gradient(to_bottom,#1f293715_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
       </div>
 
-      {/* Header / Navbar */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#090D16]/85 border-b border-gray-800/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-            <div className="p-2.5 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-cyan-400 shadow-lg shadow-indigo-500/30">
-              <Zap className="w-6 h-6 text-white" />
+      {/* Next-Level Luxurious Header / Navbar */}
+      <header className="sticky top-0 z-50 backdrop-blur-2xl bg-[#090D16]/80 border-b border-indigo-500/20 shadow-[0_10px_30px_rgba(0,0,0,0.6)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+          {/* Glowing 3D Logo */}
+          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigate('/')}>
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400 rounded-xl blur-md opacity-75 group-hover:opacity-100 transition duration-300"></div>
+              <div className="relative p-2.5 rounded-xl bg-[#090D16] border border-white/20 flex items-center justify-center">
+                <Zap className="w-5 h-5 text-cyan-400 group-hover:scale-110 transition-transform duration-300" />
+              </div>
             </div>
             <div>
-              <span className="text-lg sm:text-xl font-extrabold tracking-wider bg-gradient-to-r from-white via-gray-100 to-gray-400 bg-clip-text text-transparent">
-                NEXORA<span className="text-indigo-400">.AI</span>
-              </span>
-              <span className="hidden sm:block text-[10px] tracking-widest text-indigo-400 uppercase font-semibold">
-                Autonomous Workflow Platform
+              <div className="flex items-center gap-1.5">
+                <span className="text-xl font-black tracking-tight bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
+                  NEXORA
+                </span>
+                <span className="text-xl font-black text-cyan-400">.AI</span>
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping mr-1"></span>
+                  LIVE
+                </span>
+              </div>
+              <span className="hidden sm:block text-[9px] tracking-widest text-indigo-300/80 uppercase font-bold">
+                Autonomous Workflow Engine
               </span>
             </div>
           </div>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
-            <a href="#simulator" className="hover:text-indigo-400 transition-colors flex items-center gap-1 text-cyan-300">
-              <Play className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Live Simulator</span>
+          {/* Desktop Navigation Links (No wrapping, whitespace-nowrap) */}
+          <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold text-gray-300 whitespace-nowrap">
+            <a
+              href="#simulator"
+              className="px-3 py-1.5 rounded-lg hover:bg-cyan-500/10 hover:text-cyan-300 transition-all flex items-center gap-1.5 border border-transparent hover:border-cyan-500/20"
+            >
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+              <span>Simulator</span>
             </a>
-            <a href="#how-to-use" className="hover:text-indigo-400 transition-colors flex items-center gap-1.5 text-indigo-300">
-              <BookOpen className="w-4 h-4 text-indigo-400" />
+
+            <a
+              href="#how-to-use"
+              className="px-3 py-1.5 rounded-lg hover:bg-indigo-500/10 hover:text-indigo-300 transition-all flex items-center gap-1.5 border border-transparent hover:border-indigo-500/20"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-indigo-400" />
               <span>User Guide</span>
             </a>
-            <a href="#flows" className="hover:text-indigo-400 transition-colors">Visual Flows</a>
-            <a href="#agents" className="hover:text-indigo-400 transition-colors">AI Agents</a>
-            <a href="#architecture" className="hover:text-indigo-400 transition-colors">Architecture</a>
+
+            <a
+              href="#flows"
+              className="px-3 py-1.5 rounded-lg hover:bg-purple-500/10 hover:text-purple-300 transition-all flex items-center gap-1.5 border border-transparent hover:border-purple-500/20"
+            >
+              <GitBranch className="w-3.5 h-3.5 text-purple-400" />
+              <span>Visual Flows</span>
+            </a>
+
+            <a
+              href="#agents"
+              className="px-3 py-1.5 rounded-lg hover:bg-pink-500/10 hover:text-pink-300 transition-all flex items-center gap-1.5 border border-transparent hover:border-pink-500/20"
+            >
+              <Bot className="w-3.5 h-3.5 text-pink-400" />
+              <span>AI Agents</span>
+            </a>
+
+            <a
+              href="#architecture"
+              className="px-3 py-1.5 rounded-lg hover:bg-amber-500/10 hover:text-amber-300 transition-all flex items-center gap-1.5 border border-transparent hover:border-amber-500/20"
+            >
+              <Cpu className="w-3.5 h-3.5 text-amber-400" />
+              <span>Architecture</span>
+            </a>
           </nav>
 
           {/* Right Action Buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 whitespace-nowrap">
             <button
               onClick={() => setShowDocsModal(true)}
-              className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-xs font-semibold text-indigo-300 transition-all"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl border border-purple-500/30 bg-purple-500/10 hover:bg-purple-500/20 text-xs font-bold text-purple-300 transition-all hover:scale-105"
             >
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Guide Modal</span>
+              <span>Guide Docs</span>
             </button>
 
             <button
               onClick={() => navigate('/login')}
-              className="px-3.5 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors"
+              className="px-3.5 py-2 text-xs sm:text-sm font-semibold text-gray-300 hover:text-white transition-colors"
             >
               Sign In
             </button>
 
             <button
               onClick={() => navigate('/login')}
-              className="relative group px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white overflow-hidden shadow-lg shadow-indigo-500/25 transition-all duration-300 hover:scale-105 active:scale-95"
+              className="relative group px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white overflow-hidden shadow-lg shadow-indigo-500/30 transition-all duration-300 hover:scale-105 active:scale-95"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-500 group-hover:opacity-90 transition-opacity"></div>
               <span className="relative flex items-center gap-2">
@@ -335,9 +373,9 @@ Header: x-workspace-id: ws_prod_94028`,
             {/* Mobile Hamburger Toggle Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-xl border border-gray-800 bg-gray-900/80 text-gray-300 hover:text-white"
+              className="lg:hidden p-2 rounded-xl border border-gray-800 bg-gray-900/80 text-gray-300 hover:text-white"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
