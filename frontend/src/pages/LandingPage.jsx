@@ -1680,17 +1680,159 @@ Header: x-workspace-id: ws_prod_94028`,
         </div>
       )}
 
-      {/* Footer */}
-      <footer className="border-t border-gray-800/80 py-8 px-4 text-center text-xs text-gray-500 relative z-10">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <Zap className="w-4 h-4 text-indigo-400" />
-            <span className="font-semibold text-gray-300">NEXORA AI</span>
-            <span>— Production Ready Multi-Agent Platform</span>
+      {/* NEXT-LEVEL ENTERPRISE FOOTER */}
+      <footer className="relative z-10 bg-gradient-to-b from-[#080C16] via-[#05070E] to-[#030408] border-t border-indigo-500/20 text-gray-400 pt-16 pb-12 overflow-hidden">
+        {/* Subtle Top Glow Divider Line */}
+        <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-gray-800/80">
+            
+            {/* Column 1: Brand & Mission (Spans 2 cols on desktop) */}
+            <div className="lg:col-span-2 space-y-4 text-left">
+              <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigate('/')}>
+                <div className="relative">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400 rounded-xl blur-md opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <div className="relative p-2 rounded-xl bg-[#090D16] border border-white/20 flex items-center justify-center">
+                    <Zap className="w-5 h-5 text-cyan-400 group-hover:scale-110 transition-transform duration-300" />
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-xl font-black tracking-tight bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
+                      NEXORA
+                    </span>
+                    <span className="text-xl font-black text-cyan-400">.AI</span>
+                  </div>
+                  <span className="text-[9px] tracking-widest text-indigo-300/80 uppercase font-bold">
+                    Autonomous Workflow Engine
+                  </span>
+                </div>
+              </div>
+
+              <p className="text-xs text-gray-400 leading-relaxed max-w-sm">
+                NEXORA AI is an enterprise-grade visual workflow automation platform powered by 5 autonomous AI agents, zero-downtime self-healing retry telemetry, and hardware-level AES-256 credentials vault.
+              </p>
+
+              {/* Live Operational Status Indicator */}
+              <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-400 font-semibold">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span>All Systems Operational (99.99% Uptime)</span>
+              </div>
+
+              {/* Social / Links Row */}
+              <div className="flex items-center gap-3 pt-2">
+                <a
+                  href="https://github.com/tazimcoder/NEXORA-AI"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-xl bg-gray-900 border border-gray-800 text-gray-400 hover:text-white hover:border-indigo-500/50 hover:bg-indigo-500/10 transition-all"
+                  title="GitHub Repository"
+                >
+                  <Github className="w-4 h-4" />
+                </a>
+                <button
+                  onClick={() => setShowDocsModal(true)}
+                  className="p-2 rounded-xl bg-gray-900 border border-gray-800 text-gray-400 hover:text-cyan-400 hover:border-cyan-500/50 hover:bg-cyan-500/10 transition-all"
+                  title="Interactive Documentation"
+                >
+                  <BookOpen className="w-4 h-4" />
+                </button>
+                <a
+                  href="#simulator"
+                  className="p-2 rounded-xl bg-gray-900 border border-gray-800 text-gray-400 hover:text-purple-400 hover:border-purple-500/50 hover:bg-purple-500/10 transition-all"
+                  title="Interactive Simulator"
+                >
+                  <Terminal className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+
+            {/* Column 2: Platform Capabilities */}
+            <div className="space-y-3 text-left">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                <Workflow className="w-3.5 h-3.5 text-indigo-400" />
+                Platform
+              </h4>
+              <ul className="space-y-2 text-xs text-gray-400">
+                <li><a href="#flows" className="hover:text-cyan-300 transition-colors">Visual Drag-and-Drop</a></li>
+                <li><a href="#how-to-use" className="hover:text-cyan-300 transition-colors">AI Prompt Generator</a></li>
+                <li><a href="#simulator" className="hover:text-cyan-300 transition-colors">Real-Time Simulator</a></li>
+                <li><button onClick={() => setModalTab('nodes')} className="hover:text-cyan-300 transition-colors">Node Catalog (25+ Nodes)</button></li>
+                <li><button onClick={() => setModalTab('healing')} className="hover:text-cyan-300 transition-colors">Self-Healing Retries</button></li>
+              </ul>
+            </div>
+
+            {/* Column 3: Autonomous AI Agents */}
+            <div className="space-y-3 text-left">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                <Bot className="w-3.5 h-3.5 text-purple-400" />
+                AI Neural Agents
+              </h4>
+              <ul className="space-y-2 text-xs text-gray-400">
+                <li><a href="#agents" className="hover:text-purple-300 transition-colors">Research & Synthesis Agent</a></li>
+                <li><a href="#agents" className="hover:text-purple-300 transition-colors">Code Review & Security</a></li>
+                <li><a href="#agents" className="hover:text-purple-300 transition-colors">DevOps Auto-Healer</a></li>
+                <li><a href="#agents" className="hover:text-purple-300 transition-colors">Data Schema Extractor</a></li>
+                <li><a href="#agents" className="hover:text-purple-300 transition-colors">Security Auditor</a></li>
+              </ul>
+            </div>
+
+            {/* Column 4: Security & Developers */}
+            <div className="space-y-3 text-left">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                Enterprise & Docs
+              </h4>
+              <ul className="space-y-2 text-xs text-gray-400">
+                <li><button onClick={() => { setShowDocsModal(true); setModalTab('security'); }} className="hover:text-emerald-300 transition-colors">AES-256 Vault Security</button></li>
+                <li><button onClick={() => { setShowDocsModal(true); setModalTab('overview'); }} className="hover:text-emerald-300 transition-colors">Platform Operating Manual</button></li>
+                <li><a href="https://github.com/tazimcoder/NEXORA-AI" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-300 transition-colors flex items-center gap-1">Open Source Repo <ExternalLink className="w-3 h-3" /></a></li>
+                <li><a href="#how-to-use" className="hover:text-emerald-300 transition-colors">RBAC Workspace Control</a></li>
+                <li><span className="text-gray-500 font-mono text-[11px]">API Version: v2.5.0-prod</span></li>
+              </ul>
+            </div>
+
           </div>
-          <div>
-            Built with React 18, Vite, Node.js, Redis, and MySQL.
+
+          {/* Tech Stack Pills Bar */}
+          <div className="py-6 border-b border-gray-800/60 flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-[11px] text-gray-400">
+            <span className="font-bold text-gray-300 uppercase tracking-widest text-[10px]">Powered By:</span>
+            {[
+              'React 18',
+              'Vite',
+              'Tailwind CSS',
+              'Node.js & Express',
+              'Redis & BullMQ',
+              'MySQL Database',
+              'AES-256 Vault',
+              'React Flow v12'
+            ].map((tech, idx) => (
+              <span key={idx} className="px-2.5 py-1 rounded-lg bg-gray-900/80 border border-gray-800 text-gray-300 font-mono">
+                {tech}
+              </span>
+            ))}
           </div>
+
+          {/* Bottom Copyright & Legal Line */}
+          <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+            <div className="flex items-center gap-2">
+              <Zap className="w-4 h-4 text-cyan-400" />
+              <span>© 2026 NEXORA AI Inc. Built for High-Scale Autonomous Automation.</span>
+            </div>
+            <div className="flex items-center gap-6">
+              <a href="#how-to-use" className="hover:text-gray-300 transition-colors">Privacy Policy</a>
+              <a href="#how-to-use" className="hover:text-gray-300 transition-colors">Terms of Service</a>
+              <a href="#how-to-use" className="hover:text-gray-300 transition-colors">Security Audit</a>
+              <button onClick={() => navigate('/login')} className="text-indigo-400 hover:text-indigo-300 font-bold">
+                Launch Platform →
+              </button>
+            </div>
+          </div>
+
         </div>
       </footer>
     </div>
