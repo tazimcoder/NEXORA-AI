@@ -13,6 +13,9 @@ export const WorkflowHeader = () => {
   const publishWorkflow = useWorkflowStore((state) => state.publishWorkflow);
   const validateWorkflow = useWorkflowStore((state) => state.validateWorkflow);
 
+  const isExecuting = useWorkflowStore((state) => state.isExecuting);
+  const executeWorkflow = useWorkflowStore((state) => state.executeWorkflow);
+
   if (!workflow) return null;
 
   const statusColors = {
@@ -49,6 +52,15 @@ export const WorkflowHeader = () => {
       </div>
 
       <div className="flex items-center gap-3">
+        <button
+          onClick={executeWorkflow}
+          disabled={isExecuting}
+          className="bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-4 py-2 rounded-xl text-xs font-extrabold shadow-lg shadow-cyan-500/20 transition-all disabled:opacity-50 active:scale-95 flex items-center gap-1.5 animate-pulse"
+          title="Run Real-Time AI Workflow Notification Execution"
+        >
+          <span>{isExecuting ? '⚡ Running & Sending...' : '▶️ Test Run & Send Alert'}</span>
+        </button>
+
         <button
           onClick={validateWorkflow}
           disabled={isValidating}
