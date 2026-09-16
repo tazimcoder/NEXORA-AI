@@ -6,6 +6,7 @@ import {
   Navigate,
 } from 'react-router-dom';
 
+import LandingPage from './pages/LandingPage';
 import AuthPage from './pages/AuthPage';
 import { WorkflowsListPage } from './pages/WorkflowsListPage';
 import { WorkflowBuilderPage } from './pages/WorkflowBuilderPage';
@@ -16,6 +17,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Public Landing Page */}
+        <Route path="/" element={<LandingPage />} />
+
         {/* Public Login / Register Page */}
         <Route path="/login" element={<AuthPage />} />
 
@@ -48,16 +52,10 @@ export default function App() {
           }
         />
 
-        {/* Root Redirect */}
-        <Route
-          path="/"
-          element={<Navigate to="/workflows" replace />}
-        />
-
         {/* Catch-all Redirect */}
         <Route
           path="*"
-          element={<Navigate to="/workflows" replace />}
+          element={<Navigate to="/" replace />}
         />
       </Routes>
     </BrowserRouter>
