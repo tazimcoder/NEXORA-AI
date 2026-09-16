@@ -66,6 +66,7 @@ export default function LandingPage() {
 
   // Modal State
   const [showDocsModal, setShowDocsModal] = useState(false);
+  const [modalTab, setModalTab] = useState('overview');
   const [copiedCode, setCopiedCode] = useState(false);
 
   // Auto-advance simulator step when playing
@@ -1252,78 +1253,414 @@ Header: x-workspace-id: ws_prod_94028`,
 
       {/* INTERACTIVE DOCUMENTATION MODAL POPUP */}
       {showDocsModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
-          <div className="bg-[#0D1322] border border-gray-800 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-2xl relative text-left">
-            <div className="flex items-center justify-between border-b border-gray-800 pb-4 mb-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-xl animate-fade-in">
+          <div className="bg-[#0B0F19] border border-indigo-500/30 rounded-3xl max-w-5xl w-full max-h-[90vh] flex flex-col shadow-2xl shadow-indigo-950/80 text-left overflow-hidden relative">
+            
+            {/* Modal Header */}
+            <div className="p-6 border-b border-gray-800/80 bg-gradient-to-r from-indigo-950/40 via-purple-950/20 to-gray-950 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-400">
-                  <BookOpen className="w-5 h-5" />
+                <div className="p-2.5 rounded-2xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 shadow-lg shadow-indigo-500/10">
+                  <BookOpen className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white">NEXORA AI — Official User Guide & Manual</h3>
-                  <p className="text-xs text-gray-400">Complete walkthrough for building and executing workflows</p>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-xl font-bold text-white tracking-wide">NEXORA AI — Platform Operating Manual</h3>
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                      v2.5 Interactive Guide
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    Everything you need to know about post-login usage, node builder, AI agents & self-healing automation.
+                  </p>
                 </div>
               </div>
               <button
                 onClick={() => setShowDocsModal(false)}
-                className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
+                className="p-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800/80 transition-all border border-transparent hover:border-gray-700"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="space-y-6 text-sm text-gray-300 leading-relaxed">
-              <div className="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
-                <h4 className="font-bold text-white text-base mb-1 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-cyan-400" />
-                  Quick Overview
-                </h4>
-                <p className="text-xs text-gray-300">
-                  NEXORA AI allows you to construct automated workflows by chaining Trigger, Condition, and Action nodes. You can either build them visually on the React Flow canvas or describe them in natural language for AI to generate.
-                </p>
-              </div>
+            {/* Navigation Bar Tabs */}
+            <div className="flex items-center gap-1 sm:gap-2 p-2 bg-[#080B13] border-b border-gray-800/80 overflow-x-auto no-scrollbar">
+              {[
+                { id: 'overview', label: '1. Post-Login Quickstart', icon: Sparkles, color: 'text-cyan-400' },
+                { id: 'canvas', label: '2. Visual Builder & AI Prompt', icon: Workflow, color: 'text-indigo-400' },
+                { id: 'nodes', label: '3. Node Catalog & Variables', icon: Code2, color: 'text-emerald-400' },
+                { id: 'agents', label: '4. Autonomous 5 AI Agents', icon: Bot, color: 'text-purple-400' },
+                { id: 'healing', label: '5. Self-Healing & Telemetry', icon: RefreshCw, color: 'text-amber-400' },
+                { id: 'security', label: '6. Vault & Security', icon: Lock, color: 'text-rose-400' },
+              ].map((tab) => {
+                const Icon = tab.icon;
+                const isActive = modalTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setModalTab(tab.id)}
+                    className={`flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
+                      isActive
+                        ? 'bg-indigo-600/30 text-white border border-indigo-500/50 shadow-md shadow-indigo-600/20'
+                        : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50 border border-transparent'
+                    }`}
+                  >
+                    <Icon className={`w-4 h-4 ${isActive ? tab.color : 'text-gray-400'}`} />
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
+            </div>
 
-              <div>
-                <h4 className="font-bold text-white text-base mb-3 flex items-center gap-2">
-                  <Workflow className="w-4 h-4 text-indigo-400" />
-                  How to Build Your First Workflow
-                </h4>
-                <ol className="list-decimal list-inside space-y-2.5 text-xs text-gray-300">
-                  <li><strong className="text-white">Sign In:</strong> Register your account and navigate to the Workflows Dashboard.</li>
-                  <li><strong className="text-white">Create Workflow:</strong> Click "Create Workflow" or open an existing draft.</li>
-                  <li><strong className="text-white">Select Trigger Node:</strong> Add a <em>Manual Trigger</em>, <em>Webhook Listener</em>, or <em>Schedule Timer</em>.</li>
-                  <li><strong className="text-white">Add Actions:</strong> Drag action nodes such as <em>HTTP Request</em>, <em>Telegram Bot</em>, or <em>Slack Message</em> onto the canvas.</li>
-                  <li><strong className="text-white">Connect Edges:</strong> Drag lines between output handles and input handles to define execution order.</li>
-                  <li><strong className="text-white">Run & Test:</strong> Click the "Run Workflow" button to watch node-by-node execution telemetry!</li>
-                </ol>
-              </div>
+            {/* Modal Body - Tab Contents */}
+            <div className="p-6 overflow-y-auto flex-1 space-y-6 text-sm text-gray-300 leading-relaxed custom-scrollbar">
 
-              <div className="border-t border-gray-800 pt-5">
-                <h4 className="font-bold text-white text-base mb-3 flex items-center gap-2">
-                  <Bot className="w-4 h-4 text-purple-400" />
-                  Using the AI Prompt Generator
-                </h4>
-                <p className="text-xs text-gray-300 mb-3">
-                  Click the **"AI Generator"** button inside the builder canvas and type any prompt:
-                </p>
-                <div className="p-3 rounded-lg bg-gray-950 font-mono text-xs text-cyan-300 border border-gray-800">
-                  "Create a workflow that checks website status every 10 minutes, and if HTTP status is 500, send Telegram alert to channel @my_ops_alerts."
+              {/* TAB 1: OVERVIEW & POST-LOGIN */}
+              {modalTab === 'overview' && (
+                <div className="space-y-6 animate-fade-in">
+                  <div className="p-4 rounded-2xl bg-indigo-950/30 border border-indigo-500/20">
+                    <h4 className="font-bold text-white text-base mb-2 flex items-center gap-2">
+                      <Sparkles className="w-5 h-5 text-cyan-400" />
+                      What Happens After You Log In?
+                    </h4>
+                    <p className="text-xs text-gray-300 leading-relaxed">
+                      Once you authenticate via the Login page, NEXORA AI opens your personal Cloud Operations Dashboard. You get access to your visual workflow canvas, real-time agent monitoring telemetry, securely stored credentials vault, and live execution audit logs.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-4 rounded-2xl bg-gray-900/60 border border-gray-800 hover:border-indigo-500/40 transition-all">
+                      <div className="flex items-center gap-2 mb-2 text-indigo-400 font-bold text-sm">
+                        <LayoutDashboard className="w-4 h-4" />
+                        1. Workflows Dashboard
+                      </div>
+                      <p className="text-xs text-gray-400">
+                        View all your active, paused, or draft workflows in a card grid with live execution counts, last run status, and one-click toggle switches.
+                      </p>
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-gray-900/60 border border-gray-800 hover:border-purple-500/40 transition-all">
+                      <div className="flex items-center gap-2 mb-2 text-purple-400 font-bold text-sm">
+                        <PlusCircle className="w-4 h-4" />
+                        2. Create & Import
+                      </div>
+                      <p className="text-xs text-gray-400">
+                        Click <strong className="text-white">"+ New Workflow"</strong> to open a blank drag-and-drop canvas or choose from 20+ pre-built enterprise automation templates.
+                      </p>
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-gray-900/60 border border-gray-800 hover:border-cyan-500/40 transition-all">
+                      <div className="flex items-center gap-2 mb-2 text-cyan-400 font-bold text-sm">
+                        <Key className="w-4 h-4" />
+                        3. Credentials Vault
+                      </div>
+                      <p className="text-xs text-gray-400">
+                        Safely store Telegram Tokens, Slack Webhooks, OpenAI API Keys, and Database Passwords with AES-256 military-grade encryption.
+                      </p>
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-gray-900/60 border border-gray-800 hover:border-emerald-500/40 transition-all">
+                      <div className="flex items-center gap-2 mb-2 text-emerald-400 font-bold text-sm">
+                        <Activity className="w-4 h-4" />
+                        4. Execution Telemetry
+                      </div>
+                      <p className="text-xs text-gray-400">
+                        Inspect millisecond-accurate log trace trees, node input/output payloads, and self-healing auto-repair retry histories.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Interactive Step-by-Step Flow */}
+                  <div className="border-t border-gray-800/80 pt-5">
+                    <h4 className="font-bold text-white text-sm mb-3">User Operating Flow (Step-by-Step)</h4>
+                    <div className="space-y-3">
+                      {[
+                        { step: '01', title: 'Sign In & Authenticate', desc: 'Login with your email to receive JWT session token and load workspace state.' },
+                        { step: '02', title: 'Open Builder Canvas', desc: 'Click "+ Create Workflow" to open the interactive React Flow visual graph builder.' },
+                        { step: '03', title: 'Drag & Drop Nodes or Prompt AI', desc: 'Add Trigger, Action, and Condition nodes manually or click "Generate with AI".' },
+                        { step: '04', title: 'Deploy & Monitor', desc: 'Click "Run Workflow" to trigger execution with live node-by-node status glow.' }
+                      ].map((item, idx) => (
+                        <div key={idx} className="flex items-center gap-4 p-3 rounded-xl bg-gray-950/80 border border-gray-800">
+                          <span className="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 font-bold text-xs flex items-center justify-center border border-indigo-500/30">
+                            {item.step}
+                          </span>
+                          <div>
+                            <h5 className="font-bold text-white text-xs">{item.title}</h5>
+                            <p className="text-[11px] text-gray-400">{item.desc}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              <div className="border-t border-gray-800 pt-5 flex items-center justify-between">
-                <span className="text-xs text-gray-400">Need more help? Check the README documentation in GitHub repo.</span>
+              {/* TAB 2: VISUAL BUILDER & AI PROMPT */}
+              {modalTab === 'canvas' && (
+                <div className="space-y-6 animate-fade-in">
+                  <div className="p-4 rounded-2xl bg-purple-950/30 border border-purple-500/20">
+                    <h4 className="font-bold text-white text-base mb-1 flex items-center gap-2">
+                      <Workflow className="w-5 h-5 text-purple-400" />
+                      Visual Drag-and-Drop Canvas & AI Generator
+                    </h4>
+                    <p className="text-xs text-gray-300">
+                      The NEXORA Builder lets you create complex multi-step pipelines visually or let AI construct them automatically from plain text prompts.
+                    </p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="p-4 rounded-xl bg-gray-900/60 border border-gray-800">
+                      <h5 className="font-bold text-white text-sm mb-2 flex items-center gap-2">
+                        <Sparkles className="w-4 h-4 text-cyan-400" />
+                        Option A: Natural Language AI Generator
+                      </h5>
+                      <p className="text-xs text-gray-400 mb-3">
+                        Inside the builder, click the glowing <strong className="text-cyan-300">"✨ AI Prompt Generator"</strong> button. Describe what you want in plain Hindi/English:
+                      </p>
+                      <div className="p-3.5 rounded-xl bg-gray-950 border border-cyan-500/30 text-cyan-300 font-mono text-xs flex items-center justify-between">
+                        <span>"Build a workflow that listens for GitHub push webhooks, reviews changed files with AI Code Reviewer, and sends Telegram alert."</span>
+                        <span className="px-2 py-1 rounded bg-cyan-500/20 text-[10px] font-bold text-cyan-400">AI Prompt</span>
+                      </div>
+                      <p className="text-[11px] text-gray-400 mt-2">
+                        ⚡ NEXORA AI automatically parses your request, creates nodes, connects handles, and populates parameters!
+                      </p>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-gray-900/60 border border-gray-800">
+                      <h5 className="font-bold text-white text-sm mb-2 flex items-center gap-2">
+                        <SlidersHorizontal className="w-4 h-4 text-indigo-400" />
+                        Option B: Manual Drag & Drop Construction
+                      </h5>
+                      <ul className="space-y-2 text-xs text-gray-300">
+                        <li className="flex items-start gap-2">
+                          <span className="text-indigo-400 font-bold">•</span>
+                          <span><strong>Left Sidebar Catalog:</strong> Choose from 25+ node cards categorized into Triggers, Actions, Conditions, and AI Agents.</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-indigo-400 font-bold">•</span>
+                          <span><strong>Connecting Handles:</strong> Click and drag from an output handle (circle on right) to an input handle (circle on left).</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-indigo-400 font-bold">•</span>
+                          <span><strong>Node Config Inspector:</strong> Click any placed node on the canvas to configure parameters like Webhook URLs, Telegram Chat IDs, or Headers in the right panel.</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 3: NODES CATALOG & VARIABLES */}
+              {modalTab === 'nodes' && (
+                <div className="space-y-6 animate-fade-in">
+                  <div className="p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/20">
+                    <h4 className="font-bold text-white text-base mb-1 flex items-center gap-2">
+                      <Code2 className="w-5 h-5 text-emerald-400" />
+                      Node Catalog & Dynamic Variable Mapping
+                    </h4>
+                    <p className="text-xs text-gray-300">
+                      Nodes pass outputs to subsequent nodes seamlessly using double curly brace variable syntax <code className="text-emerald-300 font-mono text-[11px]">{'{{node_name.output}}'}</code>.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="p-3.5 rounded-xl bg-gray-900/60 border border-indigo-500/30">
+                      <h5 className="font-bold text-indigo-400 text-xs mb-1.5 flex items-center gap-1.5">
+                        <Zap className="w-3.5 h-3.5" />
+                        Triggers (Inputs)
+                      </h5>
+                      <ul className="text-[11px] text-gray-300 space-y-1">
+                        <li>• Webhook Listener</li>
+                        <li>• Cron Scheduler (Interval)</li>
+                        <li>• Manual Trigger Button</li>
+                        <li>• Database Event Poller</li>
+                      </ul>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl bg-gray-900/60 border border-emerald-500/30">
+                      <h5 className="font-bold text-emerald-400 text-xs mb-1.5 flex items-center gap-1.5">
+                        <Send className="w-3.5 h-3.5" />
+                        Actions (Outputs)
+                      </h5>
+                      <ul className="text-[11px] text-gray-300 space-y-1">
+                        <li>• HTTP Request (GET/POST)</li>
+                        <li>• Telegram Bot Notification</li>
+                        <li>• Slack Alert Hook</li>
+                        <li>• JS Sandboxed Code Runner</li>
+                      </ul>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl bg-gray-900/60 border border-amber-500/30">
+                      <h5 className="font-bold text-amber-400 text-xs mb-1.5 flex items-center gap-1.5">
+                        <GitBranch className="w-3.5 h-3.5" />
+                        Conditions & Logic
+                      </h5>
+                      <ul className="text-[11px] text-gray-300 space-y-1">
+                        <li>• If/Else Branching</li>
+                        <li>• Switch Case Router</li>
+                        <li>• Data Filter / Mapper</li>
+                        <li>• JSON Schema Validator</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Variable Syntax Example */}
+                  <div className="p-4 rounded-xl bg-gray-950 border border-gray-800">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-bold text-gray-200">Dynamic Variable Interpolation Syntax</span>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText('{{node_1.output.data.user_id}}');
+                          setCopiedCode(true);
+                          setTimeout(() => setCopiedCode(false), 2000);
+                        }}
+                        className="flex items-center gap-1.5 text-[10px] font-bold text-indigo-400 hover:text-indigo-300 bg-indigo-500/10 px-2.5 py-1 rounded-lg border border-indigo-500/20"
+                      >
+                        {copiedCode ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                        <span>{copiedCode ? 'Copied Variable!' : 'Copy Syntax'}</span>
+                      </button>
+                    </div>
+                    <pre className="text-xs font-mono text-cyan-300 bg-black/60 p-3 rounded-lg overflow-x-auto border border-gray-800">
+                      {`// Referencing Webhook Payload in Telegram Bot Node:
+"Header": "Alert for User: {{webhook_trigger.output.body.username}}"
+"Message": "Status Code returned: {{http_check.output.statusCode}}"`}
+                    </pre>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 4: AUTONOMOUS 5 AI AGENTS */}
+              {modalTab === 'agents' && (
+                <div className="space-y-6 animate-fade-in">
+                  <div className="p-4 rounded-2xl bg-purple-950/30 border border-purple-500/20">
+                    <h4 className="font-bold text-white text-base mb-1 flex items-center gap-2">
+                      <Bot className="w-5 h-5 text-purple-400" />
+                      5 Specialized Autonomous AI Agents
+                    </h4>
+                    <p className="text-xs text-gray-300">
+                      NEXORA AI embeds 5 specialized neural agents into nodes that automatically process data, write code, and repair errors.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    {[
+                      { name: 'Research & Synthesis Agent', role: 'Scrapes web documentation, summarizes long JSON/XML data, and extracts key insights.', badge: 'NLP / Research', color: 'text-cyan-400 border-cyan-500/30 bg-cyan-500/10' },
+                      { name: 'Code Review & Security Agent', role: 'Performs AST code analysis on PR diffs, detects SQL injection risks & flags memory leaks.', badge: 'AST Analysis', color: 'text-purple-400 border-purple-500/30 bg-purple-500/10' },
+                      { name: 'DevOps Self-Healing Agent', role: 'Monitors HTTP 5xx errors, automatically restarts failing containers & re-routes traffic.', badge: 'Auto-Healing', color: 'text-amber-400 border-amber-500/30 bg-amber-500/10' },
+                      { name: 'Data Extraction Agent', role: 'Converts unstructured text, PDFs, and raw logs into validated JSON schemas.', badge: 'Structured Data', color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' },
+                      { name: 'Security Auditor Agent', role: 'Validates JWT expirations, scans API headers, and manages secrets rotation.', badge: 'SecOps Audit', color: 'text-rose-400 border-rose-500/30 bg-rose-500/10' },
+                    ].map((agent, i) => (
+                      <div key={i} className="p-3.5 rounded-xl bg-gray-900/60 border border-gray-800 flex items-center justify-between gap-4">
+                        <div>
+                          <h5 className="font-bold text-white text-xs flex items-center gap-2">
+                            <Bot className="w-3.5 h-3.5 text-indigo-400" />
+                            {agent.name}
+                          </h5>
+                          <p className="text-[11px] text-gray-400 mt-0.5">{agent.role}</p>
+                        </div>
+                        <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold border ${agent.color} whitespace-nowrap`}>
+                          {agent.badge}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 5: SELF-HEALING & TELEMETRY */}
+              {modalTab === 'healing' && (
+                <div className="space-y-6 animate-fade-in">
+                  <div className="p-4 rounded-2xl bg-amber-950/30 border border-amber-500/20">
+                    <h4 className="font-bold text-white text-base mb-1 flex items-center gap-2">
+                      <RefreshCw className="w-5 h-5 text-amber-400" />
+                      Zero-Downtime Self-Healing & Execution Logs
+                    </h4>
+                    <p className="text-xs text-gray-300">
+                      When an external API or node fails, NEXORA AI does not crash. It automatically triggers exponential backoff retries and AI self-repair.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-4 rounded-xl bg-gray-900/60 border border-gray-800">
+                      <h5 className="font-bold text-white text-xs mb-2 flex items-center gap-2">
+                        <AlertTriangle className="w-4 h-4 text-amber-400" />
+                        Automatic Retry Policy
+                      </h5>
+                      <p className="text-[11px] text-gray-400 leading-relaxed">
+                        Retries failed HTTP/Database calls with <strong>Exponential Backoff</strong> (1s → 2s → 4s). If all retries fail, it diverts output to a Dead Letter Queue (DLQ).
+                      </p>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-gray-900/60 border border-gray-800">
+                      <h5 className="font-bold text-white text-xs mb-2 flex items-center gap-2">
+                        <Terminal className="w-4 h-4 text-cyan-400" />
+                        Live Step Telemetry
+                      </h5>
+                      <p className="text-[11px] text-gray-400 leading-relaxed">
+                        Watch node status light up live in real-time. Green glow indicates <span className="text-emerald-400 font-semibold">200 OK</span>, Yellow indicates <span className="text-amber-400 font-semibold">Retrying</span>, and Red indicates <span className="text-rose-400 font-semibold">Self-Healed</span>.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 6: SECURITY & VAULT */}
+              {modalTab === 'security' && (
+                <div className="space-y-6 animate-fade-in">
+                  <div className="p-4 rounded-2xl bg-rose-950/30 border border-rose-500/20">
+                    <h4 className="font-bold text-white text-base mb-1 flex items-center gap-2">
+                      <Lock className="w-5 h-5 text-rose-400" />
+                      AES-256 Encrypted Credentials Vault
+                    </h4>
+                    <p className="text-xs text-gray-300">
+                      Keep your sensitive API keys, bot tokens, and database passwords completely secure and encrypted at rest.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="p-4 rounded-xl bg-gray-900/60 border border-gray-800">
+                      <h5 className="font-bold text-white text-xs mb-1.5 flex items-center gap-2">
+                        <Key className="w-4 h-4 text-rose-400" />
+                        How to Store Secrets in Vault
+                      </h5>
+                      <ol className="list-decimal list-inside space-y-1.5 text-xs text-gray-300">
+                        <li>Navigate to the <strong className="text-white">Credentials Vault</strong> tab in header.</li>
+                        <li>Click <strong className="text-white">"+ Add Credential"</strong> and select type (e.g. Telegram Bot Token).</li>
+                        <li>Input secret key. It is immediately encrypted using AES-256.</li>
+                        <li>Reference inside nodes using <code className="text-rose-300 font-mono text-[11px]">{'{{env.MY_TELEGRAM_TOKEN}}'}</code>.</li>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 sm:p-5 border-t border-gray-800/80 bg-gray-950/90 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div className="flex items-center gap-2 text-xs text-gray-400">
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                <span>NEXORA Platform is enterprise-ready & production tested.</span>
+              </div>
+              <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+                <button
+                  onClick={() => setShowDocsModal(false)}
+                  className="px-4 py-2.5 rounded-xl border border-gray-700 text-gray-300 hover:text-white hover:bg-gray-800 text-xs font-semibold transition-all"
+                >
+                  Close Guide
+                </button>
                 <button
                   onClick={() => {
                     setShowDocsModal(false);
                     navigate('/login');
                   }}
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-500 text-white font-bold text-xs hover:scale-105 transition-all"
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white font-bold text-xs shadow-lg shadow-indigo-600/30 transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
                 >
-                  Start Building Now
+                  <span>Launch Platform Now</span>
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
+
           </div>
         </div>
       )}
