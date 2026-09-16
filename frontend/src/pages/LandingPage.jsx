@@ -904,47 +904,87 @@ Header: x-workspace-id: ws_prod_94028`,
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Screen 1 */}
-              <div className="bg-gray-950 p-6 rounded-2xl border border-gray-800 hover:border-purple-500/50 transition-all">
-                <div className="p-3 rounded-xl bg-purple-500/10 text-purple-400 w-fit mb-4">
+              <div
+                onClick={() => { setShowDocsModal(true); setModalTab('overview'); }}
+                className="bg-gray-950/80 p-6 rounded-2xl border border-gray-800 hover:border-purple-500/60 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300 cursor-pointer group relative overflow-hidden"
+              >
+                <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform"></div>
+                <div className="p-3 rounded-xl bg-purple-500/10 text-purple-400 w-fit mb-4 group-hover:scale-110 group-hover:rotate-6 transition-transform">
                   <LayoutDashboard className="w-6 h-6" />
                 </div>
-                <h4 className="text-lg font-bold text-white">1. Workflows Dashboard</h4>
+                <h4 className="text-lg font-bold text-white group-hover:text-purple-300 transition-colors flex items-center justify-between">
+                  <span>1. Workflows Dashboard</span>
+                  <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-purple-400" />
+                </h4>
                 <p className="text-xs text-gray-400 mt-2 leading-relaxed">
                   View all saved workflows, total execution counts, active triggers, and status tags (Draft, Active, Paused).
                 </p>
+                <span className="mt-4 inline-flex items-center gap-1 text-[11px] font-bold text-purple-400 group-hover:underline">
+                  Explore Dashboard Manual →
+                </span>
               </div>
 
               {/* Screen 2 */}
-              <div className="bg-gray-950 p-6 rounded-2xl border border-gray-800 hover:border-indigo-500/50 transition-all">
-                <div className="p-3 rounded-xl bg-indigo-500/10 text-indigo-400 w-fit mb-4">
+              <div
+                onClick={() => { setShowDocsModal(true); setModalTab('canvas'); }}
+                className="bg-gray-950/80 p-6 rounded-2xl border border-gray-800 hover:border-indigo-500/60 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 cursor-pointer group relative overflow-hidden"
+              >
+                <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform"></div>
+                <div className="p-3 rounded-xl bg-indigo-500/10 text-indigo-400 w-fit mb-4 group-hover:scale-110 group-hover:rotate-6 transition-transform">
                   <PlusCircle className="w-6 h-6" />
                 </div>
-                <h4 className="text-lg font-bold text-white">2. Visual Canvas Builder</h4>
+                <h4 className="text-lg font-bold text-white group-hover:text-indigo-300 transition-colors flex items-center justify-between">
+                  <span>2. Visual Canvas Builder</span>
+                  <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-indigo-400" />
+                </h4>
                 <p className="text-xs text-gray-400 mt-2 leading-relaxed">
                   Drag triggers & actions from left sidebar onto React Flow canvas. Click nodes to open configuration panels.
                 </p>
+                <span className="mt-4 inline-flex items-center gap-1 text-[11px] font-bold text-indigo-400 group-hover:underline">
+                  Open Canvas Manual →
+                </span>
               </div>
 
               {/* Screen 3 */}
-              <div className="bg-gray-950 p-6 rounded-2xl border border-gray-800 hover:border-cyan-500/50 transition-all">
-                <div className="p-3 rounded-xl bg-cyan-500/10 text-cyan-400 w-fit mb-4">
+              <div
+                onClick={() => { setShowDocsModal(true); setModalTab('security'); }}
+                className="bg-gray-950/80 p-6 rounded-2xl border border-gray-800 hover:border-cyan-500/60 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/20 transition-all duration-300 cursor-pointer group relative overflow-hidden"
+              >
+                <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform"></div>
+                <div className="p-3 rounded-xl bg-cyan-500/10 text-cyan-400 w-fit mb-4 group-hover:scale-110 group-hover:rotate-6 transition-transform">
                   <SlidersHorizontal className="w-6 h-6" />
                 </div>
-                <h4 className="text-lg font-bold text-white">3. Credentials & Vault</h4>
+                <h4 className="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors flex items-center justify-between">
+                  <span>3. Credentials & Vault</span>
+                  <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-cyan-400" />
+                </h4>
                 <p className="text-xs text-gray-400 mt-2 leading-relaxed">
                   Store Telegram Bot Tokens, Slack Webhooks, and API Keys securely. AES-256 automatically encrypts secret keys.
                 </p>
+                <span className="mt-4 inline-flex items-center gap-1 text-[11px] font-bold text-cyan-400 group-hover:underline">
+                  View Vault Guide →
+                </span>
               </div>
 
               {/* Screen 4 */}
-              <div className="bg-gray-950 p-6 rounded-2xl border border-gray-800 hover:border-emerald-500/50 transition-all">
-                <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-400 w-fit mb-4">
+              <div
+                onClick={() => { setShowDocsModal(true); setModalTab('healing'); }}
+                className="bg-gray-950/80 p-6 rounded-2xl border border-gray-800 hover:border-emerald-500/60 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl hover:shadow-emerald-500/20 transition-all duration-300 cursor-pointer group relative overflow-hidden"
+              >
+                <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform"></div>
+                <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-400 w-fit mb-4 group-hover:scale-110 group-hover:rotate-6 transition-transform">
                   <Activity className="w-6 h-6" />
                 </div>
-                <h4 className="text-lg font-bold text-white">4. Execution Telemetry</h4>
+                <h4 className="text-lg font-bold text-white group-hover:text-emerald-300 transition-colors flex items-center justify-between">
+                  <span>4. Execution Telemetry</span>
+                  <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-emerald-400" />
+                </h4>
                 <p className="text-xs text-gray-400 mt-2 leading-relaxed">
                   Inspect live logs, step-by-step payloads, execution latencies, and self-healing recovery reports.
                 </p>
+                <span className="mt-4 inline-flex items-center gap-1 text-[11px] font-bold text-emerald-400 group-hover:underline">
+                  Inspect Telemetry Guide →
+                </span>
               </div>
             </div>
           </div>
@@ -1074,61 +1114,97 @@ Header: x-workspace-id: ws_prod_94028`,
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="glass-card p-8 rounded-2xl border border-gray-800 hover:border-indigo-500/40 relative group">
-              <div className="p-3 rounded-xl bg-indigo-500/10 text-indigo-400 w-fit mb-5 group-hover:scale-110 transition-transform">
+            <div
+              onClick={() => { setShowDocsModal(true); setModalTab('canvas'); }}
+              className="glass-card p-8 rounded-2xl border border-gray-800 hover:border-indigo-500/60 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 cursor-pointer relative group overflow-hidden"
+            >
+              <div className="p-3 rounded-xl bg-indigo-500/10 text-indigo-400 w-fit mb-5 group-hover:scale-125 group-hover:rotate-6 transition-transform">
                 <Workflow className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Visual Drag & Drop Canvas</h3>
+              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-indigo-300 transition-colors flex items-center justify-between">
+                <span>Visual Drag & Drop Canvas</span>
+                <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-indigo-400" />
+              </h3>
               <p className="text-sm text-gray-400 leading-relaxed">
                 Construct Directed Acyclic Graphs (DAGs) seamlessly with `@xyflow/react`. Link triggers, conditions, and action nodes with topological evaluation.
               </p>
             </div>
 
-            <div className="glass-card p-8 rounded-2xl border border-gray-800 hover:border-purple-500/40 relative group">
-              <div className="p-3 rounded-xl bg-purple-500/10 text-purple-400 w-fit mb-5 group-hover:scale-110 transition-transform">
+            <div
+              onClick={() => { setShowDocsModal(true); setModalTab('agents'); }}
+              className="glass-card p-8 rounded-2xl border border-gray-800 hover:border-purple-500/60 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300 cursor-pointer relative group overflow-hidden"
+            >
+              <div className="p-3 rounded-xl bg-purple-500/10 text-purple-400 w-fit mb-5 group-hover:scale-125 group-hover:rotate-6 transition-transform">
                 <Bot className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">5-Agent AI Orchestrator</h3>
+              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-purple-300 transition-colors flex items-center justify-between">
+                <span>5-Agent AI Orchestrator</span>
+                <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-purple-400" />
+              </h3>
               <p className="text-sm text-gray-400 leading-relaxed">
                 Delegates complex prompts across 5 specialized autonomous agents (Research, Analysis, Workflow, Action, and Review) for high accuracy execution.
               </p>
             </div>
 
-            <div className="glass-card p-8 rounded-2xl border border-gray-800 hover:border-emerald-500/40 relative group">
-              <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-400 w-fit mb-5 group-hover:scale-110 transition-transform">
+            <div
+              onClick={() => { setShowDocsModal(true); setModalTab('healing'); }}
+              className="glass-card p-8 rounded-2xl border border-gray-800 hover:border-emerald-500/60 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl hover:shadow-emerald-500/20 transition-all duration-300 cursor-pointer relative group overflow-hidden"
+            >
+              <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-400 w-fit mb-5 group-hover:scale-125 group-hover:rotate-6 transition-transform">
                 <RefreshCw className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Self-Healing Recovery</h3>
+              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-emerald-300 transition-colors flex items-center justify-between">
+                <span>Self-Healing Recovery</span>
+                <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-emerald-400" />
+              </h3>
               <p className="text-sm text-gray-400 leading-relaxed">
                 Categorizes API failures into 6 error types. Performs automatic exponential backoff retries and triggers Human-in-the-Loop escalations when needed.
               </p>
             </div>
 
-            <div className="glass-card p-8 rounded-2xl border border-gray-800 hover:border-cyan-500/40 relative group">
-              <div className="p-3 rounded-xl bg-cyan-500/10 text-cyan-400 w-fit mb-5 group-hover:scale-110 transition-transform">
+            <div
+              onClick={() => { setShowDocsModal(true); setModalTab('nodes'); }}
+              className="glass-card p-8 rounded-2xl border border-gray-800 hover:border-cyan-500/60 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/20 transition-all duration-300 cursor-pointer relative group overflow-hidden"
+            >
+              <div className="p-3 rounded-xl bg-cyan-500/10 text-cyan-400 w-fit mb-5 group-hover:scale-125 group-hover:rotate-6 transition-transform">
                 <Server className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Distributed Queue Engine</h3>
+              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors flex items-center justify-between">
+                <span>Distributed Queue Engine</span>
+                <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-cyan-400" />
+              </h3>
               <p className="text-sm text-gray-400 leading-relaxed">
                 Powered by a standalone Node.js worker daemon listening to BullMQ & Redis queues. Executes heavy background jobs asynchronously with zero blocking.
               </p>
             </div>
 
-            <div className="glass-card p-8 rounded-2xl border border-gray-800 hover:border-amber-500/40 relative group">
-              <div className="p-3 rounded-xl bg-amber-500/10 text-amber-400 w-fit mb-5 group-hover:scale-110 transition-transform">
+            <div
+              onClick={() => { setShowDocsModal(true); setModalTab('nodes'); }}
+              className="glass-card p-8 rounded-2xl border border-gray-800 hover:border-amber-500/60 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl hover:shadow-amber-500/20 transition-all duration-300 cursor-pointer relative group overflow-hidden"
+            >
+              <div className="p-3 rounded-xl bg-amber-500/10 text-amber-400 w-fit mb-5 group-hover:scale-125 group-hover:rotate-6 transition-transform">
                 <Send className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Universal Integrations</h3>
+              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-amber-300 transition-colors flex items-center justify-between">
+                <span>Universal Integrations</span>
+                <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-amber-400" />
+              </h3>
               <p className="text-sm text-gray-400 leading-relaxed">
                 Connect Telegram, Slack, Webhooks, Google Sheets, Gmail, and custom HTTP REST APIs with encrypted headers and parameter injection.
               </p>
             </div>
 
-            <div className="glass-card p-8 rounded-2xl border border-gray-800 hover:border-red-500/40 relative group">
-              <div className="p-3 rounded-xl bg-red-500/10 text-red-400 w-fit mb-5 group-hover:scale-110 transition-transform">
+            <div
+              onClick={() => { setShowDocsModal(true); setModalTab('security'); }}
+              className="glass-card p-8 rounded-2xl border border-gray-800 hover:border-rose-500/60 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl hover:shadow-rose-500/20 transition-all duration-300 cursor-pointer relative group overflow-hidden"
+            >
+              <div className="p-3 rounded-xl bg-rose-500/10 text-rose-400 w-fit mb-5 group-hover:scale-125 group-hover:rotate-6 transition-transform">
                 <Lock className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">AES-256 Key Vault</h3>
+              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-rose-300 transition-colors flex items-center justify-between">
+                <span>AES-256 Key Vault</span>
+                <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-rose-400" />
+              </h3>
               <p className="text-sm text-gray-400 leading-relaxed">
                 Multi-tenant workspace isolation with RBAC controls, JWT lifecycle, and hardware-grade AES-256-GCM encryption for third-party credentials.
               </p>
