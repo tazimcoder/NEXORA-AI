@@ -234,20 +234,7 @@ export default function AuthPage() {
           )}
 
           <div>
-            <div className="flex justify-between items-center mb-1.5">
-              <label className="block text-xs font-semibold text-slate-300">Email Address</label>
-              {emailInfo && (
-                <span className={`text-[10px] font-mono font-bold flex items-center gap-1 ${
-                  emailInfo.status === 'google' ? 'text-emerald-400' :
-                  emailInfo.status === 'business' ? 'text-sky-400' : 'text-rose-400'
-                }`}>
-                  {emailInfo.status === 'google' && <CheckCircle2 className="w-3 h-3 text-emerald-400" />}
-                  {emailInfo.status === 'business' && <ShieldCheck className="w-3 h-3 text-sky-400" />}
-                  {emailInfo.status === 'disposable' && <AlertCircle className="w-3 h-3 text-rose-400" />}
-                  {emailInfo.message}
-                </span>
-              )}
-            </div>
+            <label className="block text-xs font-semibold text-slate-300 mb-1.5">Email Address</label>
             <div className="relative">
               <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
               <input
@@ -266,23 +253,7 @@ export default function AuthPage() {
           </div>
 
           <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-xs font-semibold text-slate-300">Password</label>
-              {isLogin && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEmail('admin@nexora.ai');
-                    setPassword('123456');
-                  }}
-                  className="text-[11px] text-cyan-400 hover:text-cyan-300 font-medium flex items-center gap-1 transition-colors"
-                  title="Auto-fill Demo Credentials"
-                >
-                  <Sparkles className="w-3 h-3 text-cyan-400 animate-pulse" />
-                  <span>Fill Demo Login</span>
-                </button>
-              )}
-            </div>
+            <label className="block text-xs font-semibold text-slate-300 mb-1.5">Password</label>
             <div className="relative">
               <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
               <input
