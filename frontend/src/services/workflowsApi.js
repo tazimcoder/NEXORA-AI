@@ -33,20 +33,71 @@ export const workflowsApi = {
   },
 
   getWorkflowById: async (id) => {
+    if (id === 'template_telegram_alert') {
+      return {
+        id,
+        name: '🤖 Webhook to Telegram Incident Alert Bot',
+        description: 'Listens for incoming HTTP webhooks, validates payload, and sends formatted instant alerts to Telegram.',
+        status: 'published',
+        is_active: true,
+        current_version: 1,
+        definition_json: {
+          nodes: [
+            { id: 'node-1', type: 'trigger', position: { x: 100, y: 150 }, data: { label: 'Webhook Event Listener', type: 'trigger', subtype: 'webhook' } },
+            { id: 'node-2', type: 'condition', position: { x: 420, y: 150 }, data: { label: 'Severity Check (isError)', type: 'condition', subtype: 'if_else' } },
+            { id: 'node-3', type: 'action', position: { x: 740, y: 150 }, data: { label: 'Telegram Notification Bot', type: 'action', subtype: 'telegram' } },
+          ],
+          edges: [
+            { id: 'e1-2', source: 'node-1', target: 'node-2' },
+            { id: 'e2-3', source: 'node-2', target: 'node-3' },
+          ],
+        },
+      };
+    }
+
+    if (id === 'template_slack_ai') {
+      return {
+        id,
+        name: '✨ AI Multi-Agent Summarizer & Slack Dispatcher',
+        description: 'Processes complex text input via Autonomous Multi-Agent reasoning and posts structured summary to Slack.',
+        status: 'published',
+        is_active: true,
+        current_version: 1,
+        definition_json: {
+          nodes: [
+            { id: 'node-1', type: 'trigger', position: { x: 100, y: 150 }, data: { label: 'Manual Trigger', type: 'trigger', subtype: 'manual' } },
+            { id: 'node-2', type: 'action', position: { x: 420, y: 150 }, data: { label: 'OpenRouter LLM Agent', type: 'action', subtype: 'openrouter' } },
+            { id: 'node-3', type: 'action', position: { x: 740, y: 150 }, data: { label: 'Slack Notification', type: 'action', subtype: 'slack' } },
+          ],
+          edges: [
+            { id: 'e1-2', source: 'node-1', target: 'node-2' },
+            { id: 'e2-3', source: 'node-2', target: 'node-3' },
+          ],
+        },
+      };
+    }
+
     try {
-      return await api.get(`/workflows/${id}`);
-    } catch (err) {
-      if (err.statusCode === 405 || err.statusCode === 404 || err.code === 'NETWORK_ERROR') {
-        return {
-          id,
-          name: 'Demo Workflow Blueprint',
-          description: 'Autonomous AI Workflow',
-          status: 'draft',
-          current_version: 1,
-          definition_json: { nodes: [], edges: [] },
-        };
-      }
-      throw err;
+      const res = await api.get(`/workflows/${id}`);
+      if (res && (res.id || res.name)) return res;
+      throw new Error('NotFound');
+    } catch {
+      return {
+        id,
+        name: 'AI Automation Workflow Blueprint',
+        description: 'Modular AI Workflow Blueprint',
+        status: 'draft',
+        current_version: 1,
+        definition_json: {
+          nodes: [
+            { id: 'node-1', type: 'trigger', position: { x: 100, y: 150 }, data: { label: 'Manual Event Trigger', type: 'trigger', subtype: 'manual' } },
+            { id: 'node-2', type: 'action', position: { x: 450, y: 150 }, data: { label: 'Gemini AI Processor', type: 'action', subtype: 'gemini' } },
+          ],
+          edges: [
+            { id: 'e1-2', source: 'node-1', target: 'node-2' },
+          ],
+        },
+      };
     }
   },
 

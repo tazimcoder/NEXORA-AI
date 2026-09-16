@@ -18,12 +18,11 @@ return (
 };
 
 const unwrapResponse = (response) => {
-if (response && typeof response === 'object' && 'data' in response) {
-return response.data;
-}
-
-// Response is already unwrapped by axios interceptor (new format)
-return response;
+  if (!response) return null;
+  if (typeof response === 'object' && response.data && typeof response.data === 'object' && response.data.id) {
+    return response.data;
+  }
+  return response;
 };
 
 const normalizeDefinition = (definition) => {
